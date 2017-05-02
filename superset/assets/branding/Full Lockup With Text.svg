@@ -24,7 +24,7 @@
                             <rect id="Bottom" fill="#FFFFFF" transform="translate(116.947287, 85.695730) rotate(-320.000000) translate(-116.947287, -85.695730) " x="107.936535" y="73.3847709" width="18.0215054" height="24.6219184"></rect>
                             <rect id="Top" fill="#FFFFFF" transform="translate(91.942412, 61.695730) rotate(-320.000000) translate(-91.942412, -61.695730) " x="82.9316592" y="49.3847709" width="18.0215054" height="24.6219184"></rect>
                         </g>
-                        <text id="Superset-Copy" font-family="Roboto-Black, Roboto" font-size="37.5" font-weight="700" letter-spacing="0.500625014" fill="#484848">
+                        <text id="Superset-Copy" font-family="Ubuntu" font-size="37.5" font-weight="700" letter-spacing="0.500625014" fill="#484848">
                             <tspan x="26.281362" y="192.625">Superset</tspan>
                         </text>
                     </g>

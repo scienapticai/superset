@@ -19,7 +19,7 @@ const colors = [
 const charcoal = '#484848';
 
 // Typography
-const sansSerif = '"Roboto", sans-serif';
+const sansSerif = '"Ubuntu", sans-serif';
 const letterSpacing = 'normal';
 const fontSize = 8;
 
