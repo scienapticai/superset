@@ -187,10 +187,6 @@ img.viz-thumb-option {
     max-height: 700px;
 }
 
-div.header {
-    font-weight: bold;
-}
-
 li.widget:hover {
     z-index: 1000;
 }
@@ -198,8 +194,12 @@ li.widget:hover {
 div.widget .chart-header {
     padding: .75rem 1.25rem;
     color: #333;
-    border-bottom: 1px solid rgba(0, 0, 0, .125);
     margin: 0;
+    background-color: whitesmoke;
+}
+
+div.widget .drag, div.widget .drag i {
+    cursor: move !important;
 }
 
 .chart-header .header-text {
@@ -212,7 +212,7 @@ div.widget .chart-header {
     margin-right: 10px;
 }
 
-div.widget .chart-header a {
+div.widget .chart-controls a {
     margin-left: 5px;
 }
 
