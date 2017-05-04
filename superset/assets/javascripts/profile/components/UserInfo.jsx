@@ -29,16 +29,16 @@ const UserInfo = ({ user }) => (
       </h4>
       <hr />
       <p>
-        <i className="fa fa-clock-o" /> joined {moment(user.createdOn, 'YYYYMMDD').fromNow()}
+        <i className="fa fa-clock-o fa-fw" /> joined {moment(user.createdOn, 'YYYYMMDD').fromNow()}
       </p>
       <p className="email">
-        <i className="fa fa-envelope-o" /> {user.email}
+        <i className="fa fa-envelope-o fa-fw" /> {user.email}
       </p>
       <p className="roles">
-        <i className="fa fa-lock" /> {Object.keys(user.roles).join(', ')}
+        <i className="fa fa-lock fa-fw" /> {Object.keys(user.roles).join(', ')}
       </p>
       <p>
-        <i className="fa fa-key" />&nbsp;
+        <i className="fa fa-key fa-fw" />&nbsp;
         <span className="text-muted">id:</span>&nbsp;
         <span className="user-id">{user.userId}</span>
       </p>
