@@ -1,6 +1,8 @@
 const webpack = require('webpack');
 const path = require('path');
 const fs = require('fs');
+const assetsPlugin = require('assets-webpack-plugin');
+const assetsPluginInstance = new assetsPlugin({filename: 'assets.json'});
 
 // input dir
 const APP_DIR = path.resolve(__dirname, './');
@@ -22,7 +24,7 @@ const config = {
   },
   output: {
     path: BUILD_DIR,
-    filename: `[name].${VERSION_STRING}.entry.js`,
+    filename: `[name].[hash].entry.js`,
   },
   resolve: {
     extensions: [
@@ -119,6 +121,7 @@ const config = {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
       },
     }),
+    assetsPluginInstance
   ],
 };
 if (process.env.NODE_ENV === 'production') {

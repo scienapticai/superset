@@ -31,4 +31,5 @@ const vizMap = {
   world_map: require('./world_map.js'),
   dual_line: require('./nvd3_vis.js'),
 };
+
 export default vizMap;

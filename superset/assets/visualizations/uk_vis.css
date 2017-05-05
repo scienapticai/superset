@@ -1,0 +1,32 @@
+.subunit{ fill: #dcd; }
+.background {
+  fill: none;
+  pointer-events: all;
+}
+
+#states .active {
+  opacity: 0.8;
+}
+
+.subunit .active{
+  fill: orange;
+}
+tooltip_div.tooltip {
+    position: absolute;
+    text-align: center;
+    width: auto;
+    height: auto;
+    padding: auto;
+    font: 12px sans-serif;
+    color:white;
+    background: black;
+    border: 0px;
+    border-radius: 4px;
+    pointer-events: none;
+}
+
+td, th {
+    border: 1px solid white;
+    text-align: left;
+    padding: 8px;
+}

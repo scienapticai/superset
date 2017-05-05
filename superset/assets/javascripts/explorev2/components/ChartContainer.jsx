@@ -5,6 +5,7 @@ import Mustache from 'mustache';
 import { connect } from 'react-redux';
 import { Alert, Collapse, Panel } from 'react-bootstrap';
 import visMap from '../../../visualizations/main';
+require('../../../visualizations/main_extended.js')
 import { d3format } from '../../modules/utils';
 import ExploreActionButtons from './ExploreActionButtons';
 import FaveStar from '../../components/FaveStar';
