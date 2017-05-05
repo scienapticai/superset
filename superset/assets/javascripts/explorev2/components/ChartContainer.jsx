@@ -61,6 +61,7 @@ class ChartContainer extends React.PureComponent {
         ) && !this.props.queryResponse.error
         && this.props.chartStatus !== 'failed'
         && this.props.chartStatus !== 'stopped'
+        && this.props.chartStatus !== 'loading'
       ) {
       this.renderViz();
     }

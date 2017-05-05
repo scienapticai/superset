@@ -768,7 +768,38 @@ const visTypes = {
       },
     },
   },
+
+  collapsible_force: {
+      label: 'Collapsible Force Layout',
+      controlPanelSections: [
+          {
+              label: 'Fields',
+              controlSetRows: [
+                  ['groupby'],
+                  ['metric'],
+                  ['row_limit'],
+              ],
+          },
+          {
+              label: 'Force Layout',
+              controlSetRows: [
+                  ['link_length'],
+                  ['charge'],
+                  ['gravity'],
+              ],
+          },
+      ],
+      controlOverrides: {
+          groupby: {
+              label: 'Hierarchy',
+              description: 'Pick columns in hierarchial order like grand parent, parent, child. Enter atleast 2 columns ',
+          },
+      },
+  },
+
 };
+
+
 
 export default visTypes;
 

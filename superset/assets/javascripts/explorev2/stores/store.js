@@ -1,5 +1,5 @@
 /* eslint camelcase: 0 */
-import controls from './controls';
+import controls from './controls_extended';
 import visTypes, { sectionsToRender } from './visTypes';
 
 export function getFormDataFromControls(controlsState) {
@@ -65,6 +65,7 @@ export function getControlsState(state, form_data) {
     if (typeof control.default === 'function') {
       control.default = control.default(control);
     }
+    control.validationErrors = [];
     control.value = formData[k] !== undefined ? formData[k] : control.default;
     controlsState[k] = control;
   });

@@ -130,7 +130,9 @@ class BaseViz(object):
         # [column_name in list_of_values]. `__` prefix is there to avoid
         # potential conflicts with column that would be named `from` or `to`
         since = (
-            extra_filters.get('__from') or form_data.get("since", "1 year ago")
+            extra_filters.get('__from') or
+            form_data.get("since") or
+            config.get("SUPERSET_DEFAULT_SINCE", "1 year ago")
         )
 
         from_dttm = utils.parse_human_datetime(since)
@@ -1517,6 +1519,28 @@ class MapboxViz(BaseViz):
             "color": fd.get("mapbox_color"),
         }
 
+class CollapsibleForceViz(BaseViz):
+
+    """An animated directed force layout graph visualization"""
+
+    viz_type = "collapsible_force"
+    verbose_name = _("Collapsible Force Layout")
+    credits = 'd3noob @<a href="https://bl.ocks.org/mbostock/1062288">bl.ocks.org</a>'
+    is_timeseries = False
+
+    def query_obj(self):
+        qry = super(CollapsibleForceViz, self).query_obj()
+        if len(self.form_data['groupby']) < 2:
+            raise Exception("Pick atleast 2 columns in Hierarchy Field")
+        qry['metrics'] = [self.form_data['metric']]
+        return qry
+
+    def get_data(self, df):
+        return dict(
+            records=df.to_dict(orient="records"),
+            columns=list(df.columns),
+        )
+
 
 viz_types_list = [
     TableViz,
@@ -1549,6 +1573,7 @@ viz_types_list = [
     MapboxViz,
     HistogramViz,
     SeparatorViz,
+    CollapsibleForceViz,
 ]
 
 viz_types = OrderedDict([(v.viz_type, v) for v in viz_types_list
