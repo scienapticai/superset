@@ -11,53 +11,44 @@ const propTypes = {
 function SliceCell({expandedSlices, removeSlice, slice}) {
     return (
         <div className="slice-cell" id={`${slice.slice_id}-cell`}>
-            <div className="chart-header">
-                <div className="row">
-                    <div className="col-md-12 header">
-                        <span>{slice.slice_name}</span>
-                    </div>
-                    <div className="col-md-12 chart-controls">
-                        <div className="pull-right">
-                            <a title="Move chart" data-toggle="tooltip">
-                                <i className="fa fa-arrows drag"/>
-                            </a>
-                            <a className="refresh" title="Force refresh data" data-toggle="tooltip">
-                                <i className="fa fa-repeat"/>
-                            </a>
-                            {slice.description &&
-                            <a title="Toggle chart description">
-                                <i
-                                    className="fa fa-info-circle slice_info"
-                                    title={slice.description}
-                                    data-toggle="tooltip"
-                                />
-                            </a>
-                            }
-                            <a
-                                href={slice.edit_url}
-                                title="Edit chart"
-                                data-toggle="tooltip"
-                            >
-                                <i className="fa fa-pencil"/>
-                            </a>
-                            <a href={slice.slice_url} title="Explore chart" data-toggle="tooltip">
-                                <i className="fa fa-share"/>
-                            </a>
-                            <a
-                                className="remove-chart"
-                                title="Remove chart from dashboard"
-                                data-toggle="tooltip"
-                            >
-                                <i
-                                    className="fa fa-close"
-                                    onClick={() => {
-                                        removeSlice(slice.slice_id);
-                                    }}
-                                />
-                            </a>
-                        </div>
-                    </div>
+            <div className="chart-header" >
+                <div className="pull-right chart-controls">
+                    <a className="drag" title="Move chart" data-toggle="tooltip">
+                        <i className="fa fa-arrows"/>
+                    </a>
+                    <a className="refresh" title="Force refresh data" data-toggle="tooltip">
+                        <i className="fa fa-repeat"/>
+                    </a>
+                    <a href={slice.edit_url} title="Edit chart" data-toggle="tooltip">
+                        <i className="fa fa-pencil"/>
+                    </a>
+                    {slice.description &&
+                    <a title="Toggle chart description">
+                        <i
+                            className="fa fa-info-circle slice_info"
+                            title={slice.description}
+                            data-toggle="tooltip"
+                        />
+                    </a>
+                    }
+                    <a
+                        className="remove-chart"
+                        title="Remove chart from dashboard"
+                        data-toggle="tooltip"
+                    >
+                        <i
+                            className="fa fa-close"
+                            onClick={() => {
+                                removeSlice(slice.slice_id);
+                            }}
+                        />
+                    </a>
                 </div>
+                <a className="header" onClick={(e) => {
+                    e.stopPropagation();
+                }} href={slice.slice_url} title="Explore chart" data-toggle="tooltip">
+                    {slice.slice_name}
+                </a>
             </div>
             <div
                 className="slice_description bs-callout bs-callout-default"
