@@ -784,6 +784,24 @@ const visTypes = {
       },
   },
 
+  coffee_wheel: {
+      label: 'Coffee Wheel',
+      controlPanelSections: [
+          {
+            label: 'Fields',
+            controlSetRows: [
+                ['groupby'],
+            ]
+          } ,
+      ],
+      controlOverrides: {
+          groupby: {
+              label: 'Hierarchy',
+              description: 'Pick columns in hierarchial order like grand parent, parent, child. Enter atleast 2 columns ',
+          },
+      },
+  }
+
 };
 
 
