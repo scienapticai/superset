@@ -73,18 +73,6 @@ export const sections = {
 };
 
 const visTypes = {
-  UkViz:{
-  label: 'UKViz',
-    controlPanelSections: [
-    {
-        label: 'Map Parameters',
-        controlSetRows:[
-            ['subregion'],
-            ['metrics'],
-        ]
-    }
-    ]
-  },
 
   dist_bar: {
     label: 'Distribution - Bar Chart',
