@@ -34,4 +34,5 @@ const vizMap = {
   collapsible_force: require('./collapsible_force.js'),
   coffee_wheel: require('./coffee_wheel.js'),
 };
+
 export default vizMap;
