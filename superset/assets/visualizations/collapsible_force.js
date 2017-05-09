@@ -296,9 +296,6 @@ function collapsibleForceVis(slice, json) {
             .attr("r", function(d) {
                 d.level = findMaxDepth(d, 'level');
                 d.csize = findCumulativeSize(d);
-
-                console.log(d.name, d.csize);
-
                 if(d.children || d._children){
                     return 10;
                 }
