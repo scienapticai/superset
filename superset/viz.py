@@ -1519,72 +1519,6 @@ class MapboxViz(BaseViz):
             "color": fd.get("mapbox_color"),
         }
 
-class CollapsibleForceViz(BaseViz):
-
-    """An animated directed force layout graph visualization"""
-
-    viz_type = "collapsible_force"
-    verbose_name = _("Collapsible Force Layout")
-    credits = 'd3noob @<a href="https://bl.ocks.org/mbostock/1062288">bl.ocks.org</a>'
-    is_timeseries = False
-
-    def query_obj(self):
-        qry = super(CollapsibleForceViz, self).query_obj()
-        if len(self.form_data['groupby']) < 2:
-            raise Exception("Pick atleast 2 columns in Hierarchy Field")
-        qry['metrics'] = [self.form_data['metric']]
-        return qry
-
-    def get_data(self, df):
-        return dict(
-            records=df.to_dict(orient="records"),
-            columns=list(df.columns),
-        )
-
-class CoffeeWheelViz(BaseViz):
-
-    """A multi level CoffeeWheel chart"""
-
-    viz_type = "coffee_wheel"
-    verbose_name = _("Coffee Wheel")
-    is_timeseries = False
-    credits = (
-        'Kerry Rodden '
-        '@<a href="https://bl.ocks.org/kerryrodden/7090426">bl.ocks.org</a>')
-
-    def query_obj(self):
-        d = super(CoffeeWheelViz, self).query_obj()
-        fd = self.form_data
-
-        if fd.get('groupby'):
-            d['columns'] = fd.get('groupby')
-            d['groupby'] = []
-            order_by_cols = fd.get('order_by_cols') or []
-            d['orderby'] = [json.loads(t) for t in order_by_cols]
-        else:
-            raise Exception("Invalid Input : Enter inputs to Hierarchial field ")
-        return d
-
-    def get_df(self, query_obj=None):
-        df = super(CoffeeWheelViz, self).get_df(query_obj)
-        if (
-                        self.form_data.get("granularity") == "all" and
-                        DTTM_ALIAS in df):
-            del df[DTTM_ALIAS]
-        return df
-
-    def get_data(self, df):
-        # df = self.get_df()
-        return dict(
-            records=df.to_dict(orient="records"),
-            columns=list(df.columns),
-            #colors=self.form_data.get("colors"),
-        )
-
-    def json_dumps(self, obj):
-        return json.dumps(obj, default=utils.json_iso_dttm_ser)
-
-
 viz_types_list = [
     TableViz,
     PivotTableViz,
@@ -1616,9 +1550,6 @@ viz_types_list = [
     MapboxViz,
     HistogramViz,
     SeparatorViz,
-
-    CollapsibleForceViz,
-    CoffeeWheelViz,
 ]
 
 viz_types = OrderedDict([(v.viz_type, v) for v in viz_types_list
