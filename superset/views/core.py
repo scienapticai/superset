@@ -30,7 +30,7 @@ from werkzeug.routing import BaseConverter
 
 from superset import (
     appbuilder, cache, db, viz, utils, app,
-    sm, sql_lab, results_backend, security,
+    sm, sql_lab, results_backend, security, viz_extended
 )
 from superset.legacy import cast_form_data
 from superset.utils import has_access, QueryStatus

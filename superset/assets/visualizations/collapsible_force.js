@@ -1,5 +1,7 @@
 /* eslint-disable no-param-reassign */
 import d3 from 'd3';
+import { bnbColors } from '../javascripts/modules/colors';
+
 
 require('./collapsible_force.css');
 
@@ -12,49 +14,19 @@ function collapsibleForceVis(slice, json) {
     const width = slice.width();
     const height = slice.height() - 25;
 
-    //findSize returns the size field value of current element, If element does n't have size attribute, it recurses through
-    //all its children and returns the overall size
-    function findSize(inp){
-        var res = 0;
-        if(typeof(inp) == "object"){
-            if(typeof(inp.length) == "undefined"){
-                if(typeof(inp.size) != "undefined"){
-                    return parseInt(inp.size);
-                }
-                else{
-                    if(typeof(inp.children) != "undefined"){
-                        if(inp.children != null){
-                            var i=0;
-                            for(i=0;i<inp.children.length;i++){
-                                res += findSize(inp.children[i]);
-                            }
-                        }
-                        else{
-                            var i=0;
-                            for(i=0;i<inp._children.length;i++){
-                                res += findSize(inp._children[i]);
-                            }
-                        }
-
-                    }
-                    else{
-                        console.log("Issue with children for ",inp);
-                    }
-                }
-            }
-            else{
-                var i=0;
-                for(i=0;i<inp.length;i++){
-                    res += findSize(inp[i]);
-                }
-            }
+    //Array Shuffler
+    function shuffleArray(array) {
+        for (var i = array.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
         }
-        else{
-            console.log("SOME ERROR in FINDSIZE FN with input type ");
-        }
-
-        return res;
+        return array;
     }
+
+    const colorArray = shuffleArray(bnbColors);
+
 
     //Find the max value of size in whole data
     function findMax(inp, res){
@@ -98,11 +70,46 @@ function collapsibleForceVis(slice, json) {
         return res;
     }
 
+    //Find size of node. If its leaf node, its size is returned, else aggregate sum of children's size will be returned
+    function findCumulativeSize(d){
+        if(d.size || d.csize){
+            return d.csize = (d.size || d.csize);
+        }
+        else if(d.children){
+            return d.children.reduce(function(acc, child){
+                child.csize = findCumulativeSize(child);
+                return acc + child.csize;
+            },0);
+        }
+        else{
+            return d.csize = 1;
+        }
+    }
+
+    //To find depth of a node recursively. As part of recursive call, if child nodes depth is computed, its saved.
+    function findMaxDepth(d,field){
+        var maxField = 0;
+        if(d[field]){
+            maxField = d[field];
+        }
+        else{
+            if(d.children){
+                maxField = d.children.reduce(function(acc,child){
+                    var maxChildField = findMaxDepth(child, field);
+                    child[field] = maxChildField;
+                    return Math.max(acc,maxChildField);
+                },0);
+                maxField++;
+            }
+        }
+        return maxField;
+    }
+
     var tip = d3.tip()
         .attr('class', 'd3-tip')
         .offset([-10, 0])
         .html(function(d) {
-            return "<strong>"+"Name : "+d.name+"</strong><br>"+"<strong>"+"Value : "+findSize(d)+"</strong><br><strong>";
+            return "<strong>"+"Name : "+d.name+"</strong><br>"+"<strong>"+"Value : "+d.csize+"</strong><br><strong>";
         });
 
     var root, min=width/500, max=width/50;
@@ -239,11 +246,13 @@ function collapsibleForceVis(slice, json) {
 
     if(typeof(root.length) == "undefined"){
         overallMax = findMax(root,0);
+        // overallMax = findMaxSize(root);
     }
     else{
         var i=0;
         for(i=0;i<root.length;i++){
             overallMax = Math.max(overallMax,findMax(root[i],0));
+            // overallMax = Math.max(overallMax,findMaxSize(root[i]));
         }
     }
 
@@ -285,6 +294,8 @@ function collapsibleForceVis(slice, json) {
         nodeEnter.append("circle")
         //.attr("r", function(d) { return Math.sqrt(d.size) / 10 || 4.5; });
             .attr("r", function(d) {
+                d.level = findMaxDepth(d, 'level');
+                d.csize = findCumulativeSize(d);
                 if(d.children || d._children){
                     return 10;
                 }
@@ -293,12 +304,12 @@ function collapsibleForceVis(slice, json) {
                 }
             })
             .attr("id",function(d){
-                return "circle-"+d.id.toString();
+                return slice.containerId+"-circle-"+d.id.toString();
             })
             .on('mouseenter',function(d){
                 var self = d3.select(this);
                 self.call(tip);
-                tip.show(d,document.getElementById("circle-"+d.id.toString()));
+                tip.show(d,document.getElementById(slice.containerId+"-circle-"+d.id.toString()));
             })
             .on('mouseleave',tip.hide);
 
@@ -334,9 +345,12 @@ function collapsibleForceVis(slice, json) {
     }
 
     function color(d) {
-        return d._children ? "#3182bd" // collapsed package
-            : d.children ? "#c6dbef" // expanded package
-                : "#fd8d3c"; // leaf node
+        //return bnbColors[d.level] || '#3182bd';
+        return d._children ? "#00d1c1" : (colorArray[d.level % colorArray.length] || '#3182bd');
+
+        // return d._children ? "#3182bd" // collapsed package
+        //     : d.children ? "#c6dbef" // expanded package
+        //         : "#fd8d3c"; // leaf node
     }
 
     // Toggle children on click.

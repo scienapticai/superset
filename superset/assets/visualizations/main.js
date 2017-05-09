@@ -32,5 +32,6 @@ const vizMap = {
   dual_line: require('./nvd3_vis.js'),
 
   collapsible_force: require('./collapsible_force.js'),
+  coffee_wheel: require('./coffee_wheel.js'),
 };
 export default vizMap;
