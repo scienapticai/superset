@@ -1,6 +1,7 @@
 import React from 'react';
 import { formatSelectOptionsForRange, formatSelectOptions } from '../../modules/utils';
-import visTypes from './visTypes';
+//import visTypes from './visTypes';
+import visTypes from './visTypes_extended.js';
 import * as v from '../validators';
 
 const D3_FORMAT_DOCS = 'D3 format syntax: https://github.com/d3/d3-format';

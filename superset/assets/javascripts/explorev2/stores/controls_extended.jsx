@@ -1,5 +1,5 @@
 import control from './controls';
-
+import React from 'react';
 
 const newControls = {
     // Pie Chart
@@ -28,7 +28,52 @@ const newControls = {
     linear_color_scheme: Object.assign({},control.linear_color_scheme,{ renderTrigger : true }),
     xscale_interval: Object.assign({},control.xscale_interval,{ renderTrigger : true }),
     yscale_interval: Object.assign({},control.yscale_interval,{ renderTrigger : true }),
-    canvas_image_rendering: Object.assign({},control.canvas_image_rendering,{ renderTrigger : true })
+    canvas_image_rendering: Object.assign({},control.canvas_image_rendering,{ renderTrigger : true }),
+
+    //UKMapViz Form Parameters
+    subregion:{
+        type: 'SelectControl',
+        label: 'Subregion',
+        clearable: true,
+        default: null,
+        mapStateToProps: state => ({
+            choices: (state.datasource) ? state.datasource.gb_cols : [],
+        }),
+        description: 'Select the column that has the subregion information'
+      },
+
+    Bar_Metric:{
+        type: 'SelectControl',
+        label: 'Bar Metric',
+        default: null,
+        mapStateToProps: state => ({
+              choices: (state.datasource) ? state.datasource.metrics_combo : [],
+        }),
+        description: 'Select the metric from the list of metrics to be visualised as bar'
+    },
+
+    bubble_x_ticks:{
+        type: 'SelectControl',
+        label: 'Bubble X Ticks',
+        default: null,
+        mapStateToProps: state => ({
+                    choices: (state.datasource) ? state.datasource.gb_cols : [],
+        }),
+        description: 'Select column containing X ticks'
+    },
+
+    bubble_y_ticks:{
+            type: 'SelectControl',
+            label: 'Bubble Y Ticks',
+            default: null,
+            mapStateToProps: state => ({
+                        choices: (state.datasource) ? state.datasource.gb_cols : [],
+            }),
+            description: 'Select column containing Y ticks'
+    },
+
+
+
 
 }
 
