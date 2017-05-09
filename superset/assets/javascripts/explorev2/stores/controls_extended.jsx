@@ -42,6 +42,39 @@ const newControls = {
         description: 'Select the column that has the subregion information'
       },
 
+    Bar_Metric:{
+        type: 'SelectControl',
+        label: 'Bar Metric',
+        default: null,
+        mapStateToProps: state => ({
+              choices: (state.datasource) ? state.datasource.metrics_combo : [],
+        }),
+        description: 'Select the metric from the list of metrics to be visualised as bar'
+    },
+
+    bubble_x_ticks:{
+        type: 'SelectControl',
+        label: 'Bubble X Ticks',
+        default: null,
+        mapStateToProps: state => ({
+                    choices: (state.datasource) ? state.datasource.gb_cols : [],
+        }),
+        description: 'Select column containing X ticks'
+    },
+
+    bubble_y_ticks:{
+            type: 'SelectControl',
+            label: 'Bubble Y Ticks',
+            default: null,
+            mapStateToProps: state => ({
+                        choices: (state.datasource) ? state.datasource.gb_cols : [],
+            }),
+            description: 'Select column containing Y ticks'
+    },
+
+
+
+
 }
 
 

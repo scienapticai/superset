@@ -1,0 +1,508 @@
+var d3 = window.d3 || require('d3');
+var px = require('../javascripts/modules/superset.js');
+var wrapSvgText = require('../javascripts/modules/utils.js').wrapSvgText;
+
+require('./sunburst_intensity.css');
+
+// Modified from http://bl.ocks.org/kerryrodden/7090426
+function sunburstIntensityViz(slice, rawData) {
+  console.log("sunburst");
+  var container = d3.select(slice.selector);
+    var achieved, tempSeqArray, parOfChild;
+  //var render = function () {
+    // vars with shared scope within this function
+    var margin = { top: 10, right: 5, bottom: 10, left: 5 };
+    var containerWidth   = slice.width();
+    var containerHeight  = slice.height();
+    var breadcrumbHeight = containerHeight * 0.085;
+    var visWidth         = containerWidth - margin.left - margin.right;
+    var visHeight        = containerHeight - margin.top - margin.bottom - breadcrumbHeight;
+    var radius           = Math.min(visWidth, visHeight) / 2;
+    var colorByCategory  = true; // color by category if primary/secondary metrics match
+    var getRoot = function(child){
+                //console.log("from getRoot");
+                tempSeqArray = getAncestors(child);
+                parOfChild = tempSeqArray[tempSeqArray.length - 2] || null;
+                while(parOfChild != null){
+                        child = parOfChild;
+                        tempSeqArray = getAncestors(child);
+                        parOfChild = tempSeqArray[tempSeqArray.length - 2] || null;
+                        //getRoot(parOfChild);
+                }
+                if(child.m1 > achieved){
+                        achieved = child.m1;
+                }
+                return child;
+/*              if(parOfChild == null){
+                        console.log(child);
+                        return child;
+                }
+                else{
+                        getRoot(parOfChild);
+                }*/
+          }
+
+    var maxBreadcrumbs, breadcrumbDims, // set based on data
+        totalSize, // total size of all segments; set after loading the data.
+        colorScale1, colorScale2, colorScale3,
+        breadcrumbs, vis, arcs, gMiddleText; // dom handles
+
+    // Helper + path gen functions
+    var partition = d3.layout.partition()
+      .size([2 * Math.PI, radius * radius])
+      .value(function (d) { return d.m1; });
+
+    var arc = d3.svg.arc()
+      .startAngle(function (d) {
+        return d.x;
+      })
+      .endAngle(function (d) {
+        return d.x + d.dx;
+      })
+      .innerRadius(function (d) {
+        return Math.sqrt(d.y);
+      })
+      .outerRadius(function (d) {
+        return Math.sqrt(d.y + d.dy);
+      });
+
+    var formatNum = d3.format(".3s");
+    var formatPerc = d3.format(".3p");
+
+    container.select("svg").remove();
+
+    var svg = container.append("svg:svg")
+      .attr("width", containerWidth)
+      .attr("height", containerHeight);
+
+    //d3.json(slice.jsonEndpoint(), function (error, rawData) {
+//      if (error !== null) {
+//        slice.error(error.responseText, error);
+//        return '';
+//      }
+      createBreadcrumbs(rawData);
+      createVisualization(rawData);
+
+      slice.done(rawData);
+    //});
+
+    function createBreadcrumbs(rawData) {
+      var firstRowData = rawData.data[0];
+      maxBreadcrumbs = (firstRowData.length - 2) + 1; // -2 bc row contains 2x metrics, +extra for %label and buffer
+
+      breadcrumbDims = {
+        width: visWidth / maxBreadcrumbs,
+        height: breadcrumbHeight *0.8, // more margin
+        spacing: 3,
+        tipTailWidth: 10
+      };
+
+      breadcrumbs = svg.append("svg:g")
+        .attr("class", "breadcrumbs")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      breadcrumbs.append("svg:text")
+        .attr("class", "end-label");
+    }
+
+    // Main function to draw and set up the visualization, once we have the data.
+    function createVisualization(rawData) {
+      var tree = buildHierarchy(rawData.data);
+
+      vis = svg.append("svg:g")
+        .attr("class", "sunburst-vis")
+        .attr("transform", "translate(" + (margin.left + (visWidth / 2)) + "," + (margin.top + breadcrumbHeight + (visHeight / 2)) + ")")
+        .on("mouseleave", mouseleave);
+
+      arcs = vis.append("svg:g")
+        .attr("id", "arcs");
+
+      gMiddleText = vis.append("svg:g")
+        .attr("class", "center-label");
+
+      // Bounding circle underneath the sunburst, to make it easier to detect
+      // when the mouse leaves the parent g.
+      arcs.append("svg:circle")
+        .attr("r", radius)
+        .style("opacity", 0);
+
+      // For efficiency, filter nodes to keep only those large enough to see.
+      var nodes = partition.nodes(tree)
+        .filter(function (d) {
+          return (d.dx > 0.005); // 0.005 radians = 0.29 degrees
+        });
+
+      var ext1, ext2 ;
+
+      if (rawData.form_data.metric !== rawData.form_data.secondary_metric) {
+        colorByCategory = false;
+
+        ext1 = d3.extent(nodes, function (d) {
+          return d.m1;
+        });
+
+	ext2 = d3.extent(nodes, function (d) {
+          return d.m1/d.m2;
+        });
+
+        colorScale1 = d3.scale.linear()
+          .domain([ext1[0], ext1[0] + ((ext1[1] - ext1[0]) / 2), ext1[1]])
+          .range(["red", "white", "green"]);
+	colorScale2 = d3.scale.linear()
+          .domain([ext2[0], ext2[1]])
+          .range(["red", "white"]);
+	colorScale3 = d3.scale.linear()
+          .domain([ext2[0], ext2[1]])
+          .range(["white", "green"]);
+      }
+      var pm = rawData.form_data.metric;
+      var sm = rawData.form_data.secondary_metric;
+      //var seqArray = getAncestors(d);
+      //var parOfD = sequenceArray[sequenceArray.length - 2] || null;
+      //var absPercentage = (d.m1 / totalSize).toPrecision(3);
+      //var condPercentage = parentOfD ? (d.m1 / parentOfD.m1).toPrecision(3) : null;
+      var path = arcs.data([tree]).selectAll("path")
+        .data(nodes)
+       .enter().append("svg:path")
+        .attr("display", function (d) {
+          return d.depth ? null : "none";
+        })
+        .attr("d", arc)
+        .attr("fill-rule", "evenodd")
+        .style("fill", function (d) {
+	  //console.log("d value: "+d);
+          //var seqArray = getAncestors(d);
+      //var parOfD = sequenceArray[sequenceArray.length - 2] || null;
+      //var absPercentage = (d.m1 / totalSize).toPrecision(3);
+      //var condPercentage = parentOfD ? (d.m1 / parentOfD.m1).toPrecision(3) : null;
+          return colorByCategory ? px.color.category21(d.name) : colorScale1(d.m1);
+        })
+        .style("opacity", 1)
+        .on("mouseenter", mouseenter);
+
+      // Get total size of the tree = value of root node from partition.
+      totalSize = path.node().__data__.value;
+      //path.exit().remove();
+      //console.log("totalSize: "+ totalSize);
+      var seqArray, parOfD, absPercentage, condPercentage;
+      achieved = 0;
+      path = arcs.data([tree]).selectAll("path")
+        .data(nodes)
+       //.enter().append("svg:path")
+       .style("fill", function (d) {
+          //console.log("d valeu: "+d);
+          seqArray = getAncestors(d);
+          parOfD = seqArray[seqArray.length - 2] || null;
+
+          absPercentage = (d.m1 / totalSize).toPrecision(3);
+          condPercentage = parOfD ? (d.m1 / parOfD.m1).toPrecision(3) : null;
+	  /*getRoot = function(child){
+		console.log("from getRoot");
+		tempSeqArray = getAncestors(child);
+                parOfChild = tempSeqArray[tempSeqArray.length - 2] || null;
+		while(parOfChild != null){
+			child = parOfChild;
+			tempSeqArray = getAncestors(child);
+                	parOfChild = tempSeqArray[tempSeqArray.length - 2] || null;
+			//getRoot(parOfChild);
+		}
+		if(child.m1 > achieved){
+                        achieved = child.m1;
+                }
+		return child;
+		if(parOfChild == null){
+			console.log(child);
+			return child;
+	        }
+		else{
+			getRoot(parOfChild);
+		}
+          }*/
+          if(parOfD == null){
+		/*if(d.m1 > achieved){
+			achieved = d.m1;
+		}*/
+		return colorByCategory ? px.color.category21(d.name) : colorScale1(d.m1);
+
+          }
+
+         else if(getRoot(d).m1 != achieved){
+                return colorByCategory ? px.color.category21(d.name) : colorScale2(d.m1/d.m2);
+         }
+	 else{
+		return colorByCategory ? px.color.category21(d.name) : colorScale3(d.m1/d.m2);
+	}
+        });
+    }
+
+/*    path = arcs.data([tree]).selectAll("path")
+        .data(nodes)
+       .enter()
+       .style("fill", function (d) {
+          console.log("d value: "+d);
+          var seqArray = getAncestors(d);
+      	  var parOfD = sequenceArray[sequenceArray.length - 2] || null;
+      	  var absPercentage = (d.m1 / totalSize).toPrecision(3);
+      	  var condPercentage = parentOfD ? (d.m1 / parentOfD.m1).toPrecision(3) : null;
+	  if(parOfD == null){
+          	return colorByCategory ? px.color.category21(d.name) : colorScale1(d.m1);
+	  }
+	 else{
+	 	return colorByCategory ? px.color.category21(d.name) : colorScale2(d.m1/d.m2);
+	 }
+        })*/
+
+    // Fade all but the current sequence, and show it in the breadcrumb trail.
+    function mouseenter(d) {
+      var primary_metric = rawData.form_data.metric;
+      var secondary_metric = rawData.form_data.secondary_metric;
+      var sequenceArray = getAncestors(d);
+      var parentOfD = sequenceArray[sequenceArray.length - 2] || null;
+
+      var absolutePercentage = (d.m1 / totalSize).toPrecision(3);
+      var conditionalPercentage = parentOfD ? (d.m1 / parentOfD.m1).toPrecision(3) : null;
+
+      var absolutePercString = formatPerc(absolutePercentage);
+      var conditionalPercString = parentOfD ? formatPerc(conditionalPercentage) : "";
+
+      var yOffsets = ["-25", "7", "35", "60"]; // 3 levels of text if inner-most level, 4 otherwise
+      var offsetIndex = 0;
+
+      // If metrics match, assume we are coloring by category
+      var metricsMatch = Math.abs(d.m1 - d.m2) < 0.00001;
+
+      gMiddleText.selectAll("*").remove();
+
+      gMiddleText.append("text")
+        .attr("class", "path-abs-percent")
+        .attr("y", yOffsets[offsetIndex++])
+        .text(absolutePercString + " of total");
+
+      if (conditionalPercString) {
+        gMiddleText.append("text")
+          .attr("class", "path-cond-percent")
+          .attr("y", yOffsets[offsetIndex++])
+          .text(conditionalPercString + " of parent");
+      }
+
+      gMiddleText.append("text")
+        .attr("class", "path-metrics")
+        .attr("y", yOffsets[offsetIndex++])
+        .text(primary_metric+": " + formatNum(d.m1) + (metricsMatch ? "" : ", "+secondary_metric+": " + formatNum(d.m2)));
+
+      gMiddleText.append("text")
+        .attr("class", "path-ratio")
+        .attr("y", yOffsets[offsetIndex++])
+        .text((metricsMatch ? "" : (primary_metric+"/"+secondary_metric +": " + formatPerc(d.m1))) );
+
+      // Reset and fade all the segments.
+      arcs.selectAll("path")
+        .style("stroke-width", null)
+        .style("stroke", null)
+        .style("opacity", 0.7);
+
+      // Then highlight only those that are an ancestor of the current segment.
+      arcs.selectAll("path")
+        .filter(function (node) {
+          return (sequenceArray.indexOf(node) >= 0);
+        })
+        .style("opacity", 1)
+        .style("stroke-width", "2px")
+        .style("stroke", "#000");
+
+      updateBreadcrumbs(sequenceArray, absolutePercString);
+    }
+
+    // Restore everything to full opacity when moving off the visualization.
+    function mouseleave(d) {
+
+      // Hide the breadcrumb trail
+      breadcrumbs.style("visibility", "hidden");
+
+      gMiddleText.selectAll("*").remove();
+
+      // Deactivate all segments during transition.
+      arcs.selectAll("path").on("mouseenter", null);
+      //gMiddleText.selectAll("*").remove();
+
+      // Transition each segment to full opacity and then reactivate it.
+      arcs.selectAll("path")
+        .transition()
+        .duration(200)
+        .style("opacity", 1)
+        .style("stroke", null)
+        .style("stroke-width", null)
+        .each("end", function () {
+          d3.select(this).on("mouseenter", mouseenter);
+        });
+    }
+
+    // Given a node in a partition layout, return an array of all of its ancestor
+    // nodes, highest first, but excluding the root.
+    function getAncestors(node) {
+      var path = [];
+      var current = node;
+      while (current.parent) {
+        path.unshift(current);
+        current = current.parent;
+      }
+      return path;
+    }
+
+    // Generate a string that describes the points of a breadcrumb polygon.
+    function breadcrumbPoints(d, i) {
+      var points = [];
+      points.push("0,0");
+      points.push(breadcrumbDims.width + ",0");
+      points.push(breadcrumbDims.width + breadcrumbDims.tipTailWidth + "," + (breadcrumbDims.height / 2));
+      points.push(breadcrumbDims.width+ "," + breadcrumbDims.height);
+      points.push("0," + breadcrumbDims.height);
+      if (i > 0) { // Leftmost breadcrumb; don't include 6th vertex.
+        points.push(breadcrumbDims.tipTailWidth + "," + (breadcrumbDims.height / 2));
+      }
+      return points.join(" ");
+    }
+
+    function updateBreadcrumbs(sequenceArray, percentageString) {
+      var g = breadcrumbs.selectAll("g")
+        .data(sequenceArray, function (d) {
+          return d.name + d.depth;
+        });
+
+      // Add breadcrumb and label for entering nodes.
+      var entering = g.enter().append("svg:g");
+
+      entering.append("svg:polygon")
+          .attr("points", breadcrumbPoints)
+          .style("fill", function (d) {
+	    //console.log(d.depth);
+            if(d.depth == 0){
+		return colorByCategory ? px.color.category21(d.name) : colorScale1(d.m1);
+	    }else if(getRoot(d).m1 != achieved){
+                return colorByCategory ? px.color.category21(d.name) : colorScale2(d.m1/d.m2);
+         }
+         else{
+                return colorByCategory ? px.color.category21(d.name) : colorScale3(d.m1/d.m2);
+        }
+
+          });
+
+      entering.append("svg:text")
+          .attr("x", (breadcrumbDims.width + breadcrumbDims.tipTailWidth) / 2)
+          .attr("y", breadcrumbDims.height / 4)
+          .attr("dy", "0.35em")
+          .style("fill", function (d) {
+            // Make text white or black based on the lightness of the background
+	    var col;
+	    if(d.depth == 0){
+            	col = d3.hsl(colorByCategory ? px.color.category21(d.name) : colorScale1(d.m1));
+	    }else{
+		col = d3.hsl(colorByCategory ? px.color.category21(d.name) : colorScale2(d.m1/d.m2));
+	    }
+            return col.l < 0.5 ? 'white' : 'black';
+          })
+          .attr("class", "step-label")
+          .text(function (d) { return d.name.replace(/_/g, " "); })
+          .call(wrapSvgText, breadcrumbDims.width, breadcrumbDims.height / 2);
+
+      // Set position for entering and updating nodes.
+      g.attr("transform", function (d, i) {
+        return "translate(" + i * (breadcrumbDims.width + breadcrumbDims.spacing) + ", 0)";
+      });
+
+      // Remove exiting nodes.
+      g.exit().remove();
+
+      // Now move and update the percentage at the end.
+      breadcrumbs.select(".end-label")
+          .attr("x", (sequenceArray.length + 0.5) * (breadcrumbDims.width + breadcrumbDims.spacing))
+          .attr("y", breadcrumbDims.height / 2)
+          .attr("dy", "0.35em")
+          .text(percentageString);
+
+      // Make the breadcrumb trail visible, if it's hidden.
+      breadcrumbs.style("visibility", null);
+    }
+
+    function buildHierarchy(rows) {
+      var root = {
+        name: "root",
+        children: []
+      };
+
+      for (var i = 0; i < rows.length; i++) { // each record [groupby1val, groupby2val, (<string> or 0)n, m1, m2]
+        var row = rows[i];
+        var m1 = Number(row[row.length - 2]);
+        var m2 = Number(row[row.length - 1]);
+        var levels = row.slice(0, row.length - 2);
+        if (isNaN(m1)) { // e.g. if this is a header row
+          continue;
+        }
+        var currentNode = root;
+        for (var level = 0; level < levels.length; level++) {
+          var children = currentNode.children || [];
+          var nodeName = levels[level];
+          // If the next node has the name "0", it will
+          var isLeafNode = (level >= levels.length - 1) || levels[level+1] === 0;
+          var childNode, currChild;
+
+          if (!isLeafNode) {
+            // Not yet at the end of the sequence; move down the tree.
+            var foundChild = false;
+            for (var k = 0; k < children.length; k++) {
+              currChild = children[k];
+              if (currChild.name === nodeName &&
+                  currChild.level === level) { // must match name AND level
+
+                childNode = currChild;
+                foundChild = true;
+                break;
+              }
+            }
+            // If we don't already have a child node for this branch, create it.
+            if (!foundChild) {
+              childNode = {
+                name: nodeName,
+                children: [],
+                level: level
+              };
+              children.push(childNode);
+            }
+            currentNode = childNode;
+
+          } else if (nodeName !== 0) {
+            // Reached the end of the sequence; create a leaf node.
+            childNode = {
+              name: nodeName,
+              m1: m1,
+              m2: m2
+            };
+            children.push(childNode);
+          }
+        }
+      }
+
+      function recurse(node) {
+        if (node.children) {
+          var sums;
+          var m1 = 0;
+          var m2 = 0;
+          for (var i = 0; i < node.children.length; i++) {
+            sums = recurse(node.children[i]);
+            m1 += sums[0];
+            m2 += sums[1];
+          }
+          node.m1 = m1;
+          node.m2 = m2;
+        }
+        return [node.m1, node.m2];
+      }
+
+      recurse(root);
+      return root;
+    }
+
+
+}
+
+module.exports = sunburstIntensityViz;

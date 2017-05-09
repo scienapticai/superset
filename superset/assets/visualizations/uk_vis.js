@@ -4,7 +4,8 @@ var px = window.px || require("../javascripts/modules/superset.js");
 var mapJson = require("../../data/uk_shape.json");
 var utils = require("../javascripts/modules/utils");
 require("./uk_vis.css");
-require("../javascripts/d3.tip.v0.6.3.js");
+require("./uk_vis.css");
+require("d3-tip");
 
 function UkViz(slice, json) {
 
@@ -138,8 +139,8 @@ function UkViz(slice, json) {
 
         g.transition()
         .duration(750)
-        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + z + ")translate(" + -x + "," + -y + ")")
-        .style("stroke-width", 1.5 / z + "px");
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + z + ")translate(" + -x + "," + -y + ")");
+        //.style("stroke-width", 1.5 / z + "px");
     }
     var xpos = width/2;
     var ypos = height/6;

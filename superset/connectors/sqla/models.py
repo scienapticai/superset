@@ -394,6 +394,12 @@ class SqlaTable(Model, BaseDatasource):
         else:
             main_metric_expr = literal_column("COUNT(*)").label("ccount")
 
+
+        #TODO: Move this changeof query outside of this file
+        only_select_columns = []
+        if 'only_select_columns' in extras:
+            only_select_columns = extras['only_select_columns']
+
         select_exprs = []
         groupby_exprs = []
 
@@ -414,6 +420,12 @@ class SqlaTable(Model, BaseDatasource):
             for s in columns:
                 select_exprs.append(cols[s].sqla_col)
             metrics_exprs = []
+        #TODO: Move the below elif out
+        elif only_select_columns:
+            i = 0
+            for o in only_select_columns:
+                select_exprs.append(only_select_columns[i])
+                i = i + 1
 
         if granularity:
             dttm_col = cols[granularity]
