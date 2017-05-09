@@ -13,7 +13,7 @@ from flask_appbuilder.actions import action
 from flask_appbuilder.models.sqla.filters import BaseFilter
 from flask_appbuilder.security.sqla import models as ab_models
 
-from superset import appbuilder, conf, db, utils, sm, sql_parse
+from superset import appbuilder, conf, db, utils, sm, sql_parse, viz_extended #Added By Kusumakar
 from superset.connectors.connector_registry import ConnectorRegistry
 
 

@@ -1,5 +1,5 @@
 /* eslint camelcase: 0 */
-import controls from './controls';
+import controls from './controls_extended';
 import visTypes, { sectionsToRender } from './visTypes';
 
 export function getFormDataFromControls(controlsState) {
