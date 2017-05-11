@@ -73,6 +73,7 @@ export const sections = {
 };
 
 const visTypes = {
+
   dist_bar: {
     label: 'Distribution - Bar Chart',
     controlPanelSections: [

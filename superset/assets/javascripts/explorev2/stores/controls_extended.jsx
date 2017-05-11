@@ -1,4 +1,5 @@
 import control from './controls';
+import React from 'react';
 import { formatSelectOptionsForRange, formatSelectOptions } from '../../modules/utils';
 
 const SIZE_FROM = [10, 20, 30, 40, 50];
@@ -67,6 +68,52 @@ const newControls = {
 
     //Collapsible Force Layout
     gravity: Object.assign({},control.gravity,{ renderTrigger : true })
+
+
+
+    canvas_image_rendering: Object.assign({},control.canvas_image_rendering,{ renderTrigger : true }),
+
+    //UKMapViz Form Parameters
+    subregion:{
+        type: 'SelectControl',
+        label: 'Subregion',
+        clearable: true,
+        default: null,
+        mapStateToProps: state => ({
+            choices: (state.datasource) ? state.datasource.gb_cols : [],
+        }),
+        description: 'Select the column that has the subregion information'
+      },
+
+    Bar_Metric:{
+        type: 'SelectControl',
+        label: 'Bar Metric',
+        default: null,
+        mapStateToProps: state => ({
+              choices: (state.datasource) ? state.datasource.metrics_combo : [],
+        }),
+        description: 'Select the metric from the list of metrics to be visualised as bar'
+    },
+
+    bubble_x_ticks:{
+        type: 'SelectControl',
+        label: 'Bubble X Ticks',
+        default: null,
+        mapStateToProps: state => ({
+                    choices: (state.datasource) ? state.datasource.gb_cols : [],
+        }),
+        description: 'Select column containing X ticks'
+    },
+
+    bubble_y_ticks:{
+            type: 'SelectControl',
+            label: 'Bubble Y Ticks',
+            default: null,
+            mapStateToProps: state => ({
+                        choices: (state.datasource) ? state.datasource.gb_cols : [],
+            }),
+            description: 'Select column containing Y ticks'
+    },
 
 
 

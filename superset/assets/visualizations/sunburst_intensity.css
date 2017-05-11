@@ -1,0 +1,50 @@
+.SunburstIntensityViz text {
+  text-rendering: optimizeLegibility;
+}
+.SunburstIntensityViz path {
+  stroke: #333;
+  stroke-width: 0.5px;
+}
+.SunburstIntensityViz .center-label {
+  text-anchor: middle;
+  fill: #000;
+  pointer-events: none;
+}
+.SunburstIntensityViz .path-abs-percent {
+  font-size: 3.5em;
+  font-weight: 400;
+}
+.SunburstIntensityViz .path-cond-percent {
+  font-size: 2em;
+}
+.SunburstIntensityViz .path-metrics {
+  font-size: 1.5em;
+}
+.SunburstIntensityViz .path-ratio {
+  font-size: 1.2em;
+}
+
+.SunburstIntensityViz .breadcrumbs text {
+  font-weight: 600;
+  font-size: 1.2em;
+  text-anchor: middle;
+  fill: #000;
+}
+
+/* dashboard specific */
+.dashboard .SunburstIntensityViz text {
+  font-size: 1em;
+}
+.dashboard .SunburstIntensityViz .path-abs-percent {
+  font-size: 2.5em;
+}
+.dashboard .SunburstIntensityViz .path-cond-percent {
+  font-size: 1.75em;
+}
+.dashboard .SunburstIntensityViz .path-metrics {
+  font-size: 1em;
+}
+.dashboard .SunburstIntensityViz .path-ratio {
+  font-size: 1em;
+}
+

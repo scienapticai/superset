@@ -33,4 +33,5 @@ const vizMap = {
 
   collapsible_force: require('./collapsible_force.js'),
 };
+
 export default vizMap;

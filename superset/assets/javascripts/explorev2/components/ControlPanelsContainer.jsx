@@ -8,7 +8,8 @@ import { sectionsToRender } from '../stores/visTypes';
 import ControlPanelSection from './ControlPanelSection';
 import ControlRow from './ControlRow';
 import Control from './Control';
-import controls from '../stores/controls';
+//import controls from '../stores/controls';
+import controls from '../stores/controls_extended';
 import * as actions from '../actions/exploreActions';
 
 const propTypes = {
