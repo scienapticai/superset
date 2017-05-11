@@ -1,11 +1,13 @@
 /* eslint-disable no-param-reassign */
 import d3 from 'd3';
+import { updatePayload } from './dynamic_update';
 
 require('./collapsible_force.css');
 
 /* Modified from http://bl.ocks.org/d3noob/5141278 */
 function collapsibleForceVis(slice, json) {
     const div = d3.select(slice.selector);
+
 
     div.selectAll('*').remove();
 
@@ -106,6 +108,8 @@ function collapsibleForceVis(slice, json) {
         });
 
     var root, min=width/500, max=width/50;
+
+    json = updatePayload(slice,json);
 
     var force = d3.layout.force()
         .linkDistance(parseFloat(json.form_data.link_length))

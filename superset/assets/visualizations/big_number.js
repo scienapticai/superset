@@ -1,5 +1,6 @@
 import d3 from 'd3';
 import { formatDate } from '../javascripts/modules/dates';
+import { updatePayload } from './dynamic_update';
 
 require('./big_number.css');
 
@@ -8,7 +9,10 @@ function bigNumberVis(slice, payload) {
   // Define the percentage bounds that define color from red to green
   div.html(''); // reset
   const fd = slice.formData;
-  const json = payload.data;
+  if(fd.viz_type === 'big_number_total')
+      payload = updatePayload(slice,payload)
+  const json = JSON.parse(JSON.stringify(payload.data));
+
 
   const f = d3.format(fd.y_axis_format);
   const fp = d3.format('+.1%');
@@ -17,12 +21,13 @@ function bigNumberVis(slice, payload) {
   const svg = div.append('svg');
   svg.attr('width', width);
   svg.attr('height', height);
-  const data = json.data;
+  const data = JSON.parse(JSON.stringify(json.data));
   let vCompare;
   let v;
   if (fd.viz_type === 'big_number') {
     v = data[data.length - 1][1];
   } else {
+
     v = data[0][0];
   }
   if (json.compare_lag > 0) {

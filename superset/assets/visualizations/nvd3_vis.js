@@ -8,6 +8,7 @@ import { timeFormatFactory, formatDate } from '../javascripts/modules/dates';
 import { customizeToolTip } from '../javascripts/modules/utils';
 
 import { TIME_STAMP_OPTIONS } from '../javascripts/explorev2/stores/controls';
+import { updatePayload } from './dynamic_update';
 
 const nv = require('nvd3');
 
@@ -89,7 +90,8 @@ function nvd3Vis(slice, payload) {
     let stretchMargin = 0;
     const pixelsPerCharX = 4.5; // approx, depends on font size
     let maxLabelSize = 10; // accommodate for shorter labels
-    payloadData.data.forEach((d) => {
+
+      payloadData.data.forEach((d) => {
       const axisLabels = d.values;
       for (let i = 0; i < axisLabels.length; i++) {
         maxLabelSize = Math.max(axisLabels[i].x.toString().length, maxLabelSize);
@@ -285,6 +287,8 @@ function nvd3Vis(slice, payload) {
 
       case 'bullet':
         chart = nv.models.bulletChart();
+
+
         break;
 
       default:
@@ -302,6 +306,11 @@ function nvd3Vis(slice, payload) {
     let height = slice.height() - 15;
     if (vizType === 'bullet') {
       height = Math.min(height, 50);
+      console.log("Beforeee----- SLICE : ",slice,"PAYLOAD : ",payload);
+      payload = updatePayload(slice,payload);
+      console.log("After------ SLICE : ",slice,"PAYLOAD : ",payload);
+      // updatePayload(slice,payload);
+
     }
 
     chart.height(height);
@@ -393,7 +402,7 @@ function nvd3Vis(slice, payload) {
       customizeToolTip(chart, xAxisFormatter, [yAxisFormatter1, yAxisFormatter2]);
       chart.showLegend(width > BREAKPOINTS.small);
     }
-    svg
+      svg
     .datum(payload.data)
     .transition().duration(500)
     .attr('height', height)
@@ -441,7 +450,7 @@ function nvd3Vis(slice, payload) {
         chart.margin({ bottom: maxXAxisLabelHeight + marginPad + 25 });
       }
 
-      // render chart
+        // render chart
       svg
       .datum(payload.data)
       .transition().duration(500)

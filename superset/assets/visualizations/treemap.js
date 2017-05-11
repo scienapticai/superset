@@ -18,6 +18,7 @@ function treemap(slice, payload) {
     const formatNumber = d3.format(formData.number_format);
     let transitioning;
 
+
     const x = d3.scale.linear()
         .domain([0, width])
         .range([0, width]);
@@ -29,7 +30,7 @@ function treemap(slice, payload) {
     const treemap = d3.layout.treemap()
         .children(function (d, depth) { return depth ? null : d._children; })
         .sort(function (a, b) { return a.value - b.value; })
-        .ratio(formData.treemap_ratio)
+        .ratio(formData.treemap_ratio || 1.618033988749895)
         .mode('squarify')
         .round(false);
 
@@ -229,9 +230,12 @@ function treemap(slice, payload) {
 
   div.selectAll('*').remove();
   const width = slice.width();
-  const height = slice.height() / payload.data.length;
-  for (let i = 0, l = payload.data.length; i < l; i += 1) {
-    _draw(payload.data[i], width, height, slice.formData);
+
+  const data = JSON.parse(JSON.stringify(payload.data));
+
+  const height = slice.height() / data.length;
+  for (let i = 0, l = data.length; i < l; i += 1) {
+    _draw(data[i], width, height, slice.formData);
   }
 }
 

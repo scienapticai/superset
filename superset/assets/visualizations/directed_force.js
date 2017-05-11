@@ -12,7 +12,8 @@ const directedForceVis = function (slice, json) {
   const linkLength = fd.link_length || 200;
   const charge = fd.charge || -500;
 
-  const links = json.data;
+  const links = JSON.parse(JSON.stringify(json.data));
+
   const nodes = {};
   // Compute the distinct nodes from the links.
   links.forEach(function (link) {

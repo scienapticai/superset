@@ -5,12 +5,14 @@ import { category21 } from '../javascripts/modules/colors';
 
 function wordCloudChart(slice, payload) {
   const chart = d3.select(slice.selector);
-  const data = payload.data;
   const fd = slice.formData;
-  const range = [
-    fd.size_from,
-    fd.size_to,
-  ];
+  // const data = payload.data;
+    const data = JSON.parse(JSON.stringify(payload.data))
+
+    const size_from = (isNaN(fd.size_from) ? "10" : fd.size_from.toString());
+    const size_to = (isNaN(fd.size_to) ? "70" : fd.size_to.toString());
+    const range = [size_from, size_to];
+
   const rotation = fd.rotation;
   let fRotation;
   if (rotation === 'square') {
