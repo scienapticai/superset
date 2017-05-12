@@ -2,6 +2,19 @@ import control from './controls';
 import React from 'react';
 import { formatSelectOptionsForRange, formatSelectOptions } from '../../modules/utils';
 
+function listGenerator(start,end,step){
+  const arr = [];
+  let element = start;
+  if(step == 0){
+    return arr;
+  }
+  while(element<=end && element>=start){
+    arr.push(element);
+    element+=step;
+  }
+  return arr;
+}
+
 const newControls = {
     // Pie Chart
     donut: Object.assign({},control.donut, { renderTrigger : true }),
@@ -79,10 +92,48 @@ const newControls = {
         freeForm: true,
         label: 'Gravity',
         default: '0.3',
-        choices: formatSelectOptions(['0.05','0.1','0.15','0.2','0.25','0.3','0.35','0.4','0.45','0.5','0.55','0.6','0.65',
-            '0.7','0.75','0.8','0.85','0.9','0.95','1.0',]),
+        choices: formatSelectOptions(listGenerator(0,1,0.05)),
         description: 'Gravity in the force layout',
-    }
+    },
+
+    //Pivot Table Threshold Coloring
+    min_value: {
+        type: 'SelectControl',
+        freeForm: true,
+        label: 'lower bound',
+        default: '0',
+        choices: [0, 10, 100, 1000, 10000],
+        description: 'Lower bound for coloring '
+    },
+
+    max_value: {
+        type: 'SelectControl',
+        freeForm: true,
+        label: 'upper bound',
+        default: '0',
+        choices: [10, 100, 1000, 10000, 100000],
+        description: 'Upper bound for coloring '
+    },
+
+    pivot_color: {
+        type: 'SelectControl',
+        freeForm: true,
+        label: 'color',
+        default: 'black',
+        choices: [
+            ['#4e79a7', 'blue' ],
+            ['#59a14f',	'green'],
+            ['#9c755f',	'brown'],
+            ['#f28e2b',	'orange'],
+            ['#edc948',	'yellow'],
+            ['#bab0ac',	'grey'],
+            ['#e15759',	'red'],
+            ['#b07aa1',	'purple'],
+            ['#76b7b2',	'sky-blue'],
+            ['#ff9da7',	'magenta']
+        ],
+        description: 'Values below min value will be colored with this color'
+    },
 
 }
 

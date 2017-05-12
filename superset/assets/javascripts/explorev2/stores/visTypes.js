@@ -758,52 +758,6 @@ const visTypes = {
     },
   },
 
-  collapsible_force: {
-      label: 'Collapsible Force Layout',
-      controlPanelSections: [
-          {
-              label: 'Fields',
-              controlSetRows: [
-                  ['groupby'],
-                  ['metric'],
-                  ['row_limit'],
-              ],
-          },
-          {
-              label: 'Force Layout',
-              controlSetRows: [
-                  ['link_length'],
-                  ['charge'],
-                  ['gravity'],
-              ],
-          },
-      ],
-      controlOverrides: {
-          groupby: {
-              label: 'Hierarchy',
-              description: 'Pick columns in hierarchial order like grand parent, parent, child. Enter atleast 2 columns ',
-          },
-      },
-  },
-
-  coffee_wheel: {
-      label: 'Coffee Wheel',
-      controlPanelSections: [
-          {
-            label: 'Fields',
-            controlSetRows: [
-                ['groupby'],
-            ]
-          } ,
-      ],
-      controlOverrides: {
-          groupby: {
-              label: 'Hierarchy',
-              description: 'Pick columns in hierarchial order like grand parent, parent, child. Enter atleast 2 columns ',
-          },
-      },
-  }
-
 };
 
 
