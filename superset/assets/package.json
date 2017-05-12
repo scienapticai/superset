@@ -134,6 +134,7 @@
     "transform-loader": "^0.2.3",
     "url-loader": "^0.5.7",
     "webpack": "^2.3.3",
-    "webworkify-webpack": "2.0.4"
+    "webworkify-webpack": "2.0.4",
+    "yarn": "^0.23.4"
   }
 }
