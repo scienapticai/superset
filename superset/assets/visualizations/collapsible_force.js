@@ -106,7 +106,7 @@ function collapsibleForceVis(slice, json) {
     }
 
     var tip = d3.tip()
-        .attr('class', 'd3-tip')
+        .attr('class', 'd3-tip-collapsible')
         .offset([-10, 0])
         .html(function(d) {
             return "<strong>"+"Name : "+d.name+"</strong><br>"+"<strong>"+"Value : "+d.csize+"</strong><br><strong>";

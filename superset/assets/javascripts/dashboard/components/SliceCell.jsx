@@ -1,6 +1,10 @@
 /* eslint-disable react/no-danger */
 import React from "react";
 import PropTypes from "prop-types";
+import {DropdownButton, MenuItem } from "react-bootstrap";
+import {fetchDownloadOptions} from './../support_utils.js';
+
+var saveAsPNG = require('save-svg-as-png');
 
 const propTypes = {
     slice: PropTypes.object.isRequired,
@@ -10,7 +14,7 @@ const propTypes = {
 
 function SliceCell({expandedSlices, removeSlice, slice}) {
     return (
-        <div className="slice-cell" id={`${slice.slice_id}-cell`}>
+        <div className="slice -cell" id={`${slice.slice_id}-cell`}>
             <div className="chart-header" >
                 <div className="pull-right chart-controls">
                     <a className="drag" title="Move chart" data-toggle="tooltip">
@@ -31,6 +35,12 @@ function SliceCell({expandedSlices, removeSlice, slice}) {
                         />
                     </a>
                     }
+                    {fetchDownloadOptions(slice.form_data.viz_type).indexOf('png')>=0 &&
+                      <a className="download-data-as-png" data-toggle="tooltip" title="Download as PNG">
+                          <i id={"download-as-png-icon-"+slice.slice_id} className="fa fa-file-image-o" onClick={() => {saveAsPNG.saveSvgAsPng($("#slice_"+slice.slice_id.toString()).find('svg')[0], slice.slice_name+".png", { backgroundColor: 'white'});}}></i>
+                      </a>
+
+                    }
                     <a
                         className="remove-chart"
                         title="Remove chart from dashboard"
@@ -43,6 +53,7 @@ function SliceCell({expandedSlices, removeSlice, slice}) {
                             }}
                         />
                     </a>
+
                 </div>
                 <a className="header" onClick={(e) => {
                     e.stopPropagation();

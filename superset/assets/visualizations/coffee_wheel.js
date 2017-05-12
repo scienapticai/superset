@@ -42,7 +42,7 @@ function coffeeWheelVis(slice, payload) {
             var dic={};
             var i=0;
             for(i=0;i<objArray.length;i++){
-                var curr=objArray[i]["name"];
+                var curr=objArray[i].name;
                 if(!(curr in dic)){
                     dic[curr]=Object.keys(dic).length;
                 }
@@ -92,7 +92,7 @@ function coffeeWheelVis(slice, payload) {
 
                         //We check if current child has been added to children list. If yes, we don't add
                         if(!(childName in childrenAdded)){
-                            parentObj["children"].push(childObjectArray[childDict[childName]]);
+                            parentObj.children.push(childObjectArray[childDict[childName]]);
                             childrenAdded[childName]=1;
                         }
                     }
@@ -102,7 +102,7 @@ function coffeeWheelVis(slice, payload) {
                             "name": parentName,
                             "children": []
                         };
-                        parentObj["children"].push(childObjectArray[childDict[childName]]);
+                        parentObj.children.push(childObjectArray[childDict[childName]]);
                         res.push(parentObj);
                         dict[parentName]=res.length-1;
                         childrenAdded[childName]=1;
@@ -129,7 +129,7 @@ function coffeeWheelVis(slice, payload) {
         return parentArray;
     }
 
-    var input=formatInput(payload["data"]["records"],payload["data"]["columns"],payload["data"]["colors"]);
+    var input=formatInput(payload.data.records,payload.data.columns,payload.data.colors);
 
     /*====================================================================================================================*/
     function isParentOf(n, e) {
@@ -177,7 +177,7 @@ function coffeeWheelVis(slice, payload) {
     }
 
     var tip = d3.tip()
-        .attr('class', 'd3-tip')
+        .attr('class', 'd3-tip-coffee-wheel')
         .offset([-10, 0])
         .html(function(d) {
             return "<strong>"+d.name.toUpperCase()+"</strong>";
@@ -202,7 +202,7 @@ function coffeeWheelVis(slice, payload) {
         c = 5,
         s = 1e3;
 
-    var f = div.append("svg").attr("width", height).attr("height", height).append("g").attr("transform", "translate(" + [o + 1, o ] + ")");
+    var f = div.append("svg").attr("class","coffee-wheel-svg").attr("width", height).attr("height", height).append("g").attr("class","coffee-wheel-g").attr("transform", "translate(" + [o + 1, o ] + ")");
 
     var p = d3.layout.partition().sort(null).value(function(t) {
             return 5.8 - t.depth

@@ -88,6 +88,7 @@
     "redux": "^3.5.2",
     "redux-localstorage": "^0.4.1",
     "redux-thunk": "^2.1.0",
+    "save-svg-as-png": "^1.2.0",
     "shortid": "^2.2.6",
     "supercluster": "https://github.com/georgeke/supercluster/tarball/ac3492737e7ce98e07af679623aad452373bbc40",
     "topojson": "^1.6.22",

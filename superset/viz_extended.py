@@ -262,12 +262,63 @@ class CoffeeWheelViz(BaseViz):
     def json_dumps(self, obj):
         return json.dumps(obj, default=utils.json_iso_dttm_ser)
 
+
+class PivotTableThreholdColoringViz(BaseViz):
+
+    """A pivot table view, define your rows, columns and metrics"""
+
+    viz_type = "pivot_table_threshold_coloring"
+    verbose_name = _("Pivot Table Threshold Coloring")
+    is_timeseries = False
+
+    def query_obj(self):
+        d = super(PivotTableThreholdColoringViz, self).query_obj()
+        groupby = self.form_data.get('groupby')
+        columns = self.form_data.get('columns')
+        metrics = self.form_data.get('metrics')
+        if not columns:
+            columns = []
+        if not groupby:
+            groupby = []
+        if not groupby:
+            raise Exception("Please choose at least one \"Group by\" field ")
+        if not metrics:
+            raise Exception("Please choose at least one metric")
+        if (
+                    any(v in groupby for v in columns) or
+                    any(v in columns for v in groupby)):
+            raise Exception("groupby and columns can't overlap")
+
+        d['groupby'] = list(set(groupby) | set(columns))
+        return d
+
+    def get_data(self, df):
+        if (
+                        self.form_data.get("granularity") == "all" and
+                        DTTM_ALIAS in df):
+            del df[DTTM_ALIAS]
+        df = df.pivot_table(
+            index=self.form_data.get('groupby'),
+            columns=self.form_data.get('columns'),
+            values=self.form_data.get('metrics'),
+            aggfunc=self.form_data.get('pandas_aggfunc'),
+            margins=True,
+        )
+        return df.to_html(
+            na_rep='',
+            classes=(
+                "dataframe table table-striped table-bordered "
+                "table-condensed table-hover").split(" "))
+
+
+
 viz_types_list.append(UkViz)
 viz_types_list.append(LinePlusBarChartViz)
 viz_types_list.append(BubbleWithFilterViz)
 viz_types_list.append(SunburstIntensityViz)
 viz_types_list.append(CollapsibleForceViz)
 viz_types_list.append(CoffeeWheelViz)
+viz_types_list.append(PivotTableThreholdColoringViz)
 
 for v in viz_types_list:
     if v.viz_type not in config.get('VIZ_TYPE_BLACKLIST'):
