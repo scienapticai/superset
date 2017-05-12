@@ -7,6 +7,8 @@ require('./treemap.css');
 /* Modified from http://bl.ocks.org/ganeshv/6a8e9ada3ab7f2d88022 */
 function treemap(slice, payload) {
   const div = d3.select(slice.selector);
+  const defaultTileRatio = 1.618033988749895;
+
   const _draw = function (data, eltWidth, eltHeight, formData) {
     const margin = { top: 0, right: 0, bottom: 0, left: 0 };
     const navBarHeight = 36;
@@ -30,7 +32,7 @@ function treemap(slice, payload) {
     const treemap = d3.layout.treemap()
         .children(function (d, depth) { return depth ? null : d._children; })
         .sort(function (a, b) { return a.value - b.value; })
-        .ratio(formData.treemap_ratio || 1.618033988749895)
+        .ratio(formData.treemap_ratio || defaultTileRatio)
         .mode('squarify')
         .round(false);
 
@@ -231,7 +233,8 @@ function treemap(slice, payload) {
   div.selectAll('*').remove();
   const width = slice.width();
 
-  const data = JSON.parse(JSON.stringify(payload.data));
+    const payload_copy = $.extend(true,{}, payload);
+    const data = payload_copy.data;
 
   const height = slice.height() / data.length;
   for (let i = 0, l = data.length; i < l; i += 1) {

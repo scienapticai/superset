@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import d3 from 'd3';
+import $ from 'jquery';
 
 require('./directed_force.css');
 
@@ -12,7 +13,10 @@ const directedForceVis = function (slice, json) {
   const linkLength = fd.link_length || 200;
   const charge = fd.charge || -500;
 
-  const links = JSON.parse(JSON.stringify(json.data));
+
+  const payload_copy = $.extend(true,{},json);
+  const links = payload_copy.data;
+
 
   const nodes = {};
   // Compute the distinct nodes from the links.

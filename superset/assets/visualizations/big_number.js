@@ -9,10 +9,13 @@ function bigNumberVis(slice, payload) {
   // Define the percentage bounds that define color from red to green
   div.html(''); // reset
   const fd = slice.formData;
-  if(fd.viz_type === 'big_number_total')
-      payload = updatePayload(slice,payload)
-  const json = JSON.parse(JSON.stringify(payload.data));
+  if(fd.viz_type === 'big_number_total') {
+      payload = updatePayload(slice, payload);
+  }
 
+  const payload_copy = $.extend(true,{}, payload);
+  const json = payload_copy.data;
+  const data = json.data;
 
   const f = d3.format(fd.y_axis_format);
   const fp = d3.format('+.1%');
@@ -21,7 +24,8 @@ function bigNumberVis(slice, payload) {
   const svg = div.append('svg');
   svg.attr('width', width);
   svg.attr('height', height);
-  const data = JSON.parse(JSON.stringify(json.data));
+
+
   let vCompare;
   let v;
   if (fd.viz_type === 'big_number') {

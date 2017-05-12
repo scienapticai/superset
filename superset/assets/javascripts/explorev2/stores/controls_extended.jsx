@@ -67,11 +67,8 @@ const newControls = {
     horizon_color_scale: Object.assign({},control.horizon_color_scale,{ renderTrigger : true }),
 
     //Collapsible Force Layout
-    gravity: Object.assign({},control.gravity,{ renderTrigger : true })
+    gravity: Object.assign({},control.gravity,{ renderTrigger : true }),
 
-
-
-    canvas_image_rendering: Object.assign({},control.canvas_image_rendering,{ renderTrigger : true }),
 
     //UKMapViz Form Parameters
     subregion:{
@@ -113,7 +110,7 @@ const newControls = {
                         choices: (state.datasource) ? state.datasource.gb_cols : [],
             }),
             description: 'Select column containing Y ticks'
-    },
+    }
 
 
 

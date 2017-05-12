@@ -1,4 +1,5 @@
 /* eslint-disable  no-use-before-define */
+import $ from 'jquery';
 import d3 from 'd3';
 import cloudLayout from 'd3-cloud';
 import { category21 } from '../javascripts/modules/colors';
@@ -6,9 +7,9 @@ import { category21 } from '../javascripts/modules/colors';
 function wordCloudChart(slice, payload) {
   const chart = d3.select(slice.selector);
   const fd = slice.formData;
-  // const data = payload.data;
-    const data = JSON.parse(JSON.stringify(payload.data))
 
+    const payload_copy = $.extend(true,{}, payload);
+    const data =  payload_copy.data;
     const size_from = (isNaN(fd.size_from) ? "10" : fd.size_from.toString());
     const size_to = (isNaN(fd.size_to) ? "70" : fd.size_to.toString());
     const range = [size_from, size_to];

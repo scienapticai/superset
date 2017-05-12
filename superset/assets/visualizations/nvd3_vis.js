@@ -306,11 +306,7 @@ function nvd3Vis(slice, payload) {
     let height = slice.height() - 15;
     if (vizType === 'bullet') {
       height = Math.min(height, 50);
-      console.log("Beforeee----- SLICE : ",slice,"PAYLOAD : ",payload);
       payload = updatePayload(slice,payload);
-      console.log("After------ SLICE : ",slice,"PAYLOAD : ",payload);
-      // updatePayload(slice,payload);
-
     }
 
     chart.height(height);
