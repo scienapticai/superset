@@ -14,9 +14,7 @@ const directedForceVis = function (slice, json) {
   const charge = fd.charge || -500;
 
 
-  const payload_copy = $.extend(true,{},json);
-  const links = payload_copy.data;
-
+    const links = json.data.map(item => $.extend(true,{},item));
 
   const nodes = {};
   // Compute the distinct nodes from the links.

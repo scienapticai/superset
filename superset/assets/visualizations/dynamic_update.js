@@ -2,8 +2,6 @@
  * Created by sowmya on 10/5/17.
  */
 
-
-// module.exports.updatePayload = function(slice,payload) {
 export function updatePayload(slice,payload) {
     const vizType = slice.formData.viz_type;
     const sliceFd = slice.formData;

@@ -195,8 +195,8 @@ function horizonViz(slice, payload) {
   const div = d3.select(slice.selector);
   div.selectAll('*').remove();
   let extent;
-  const payload_copy = $.extend(true,{}, payload);
-  const data = payload_copy.data;
+
+  const data = payload.data.map(item => $.extend(true,{},item));
 
 
   if (fd.horizon_color_scale === 'overall') {

@@ -233,8 +233,8 @@ function treemap(slice, payload) {
   div.selectAll('*').remove();
   const width = slice.width();
 
-    const payload_copy = $.extend(true,{}, payload);
-    const data = payload_copy.data;
+    const data = payload.data.map(item => $.extend(true,{}, item));
+
 
   const height = slice.height() / data.length;
   for (let i = 0, l = data.length; i < l; i += 1) {
