@@ -93,6 +93,67 @@ const newVisTypes = {
         }
 
     },
+
+    collapsible_force: {
+        label: 'Collapsible Force Layout',
+        controlPanelSections: [
+            {
+                label: 'Fields',
+                controlSetRows: [
+                    ['groupby'],
+                    ['metric'],
+                    ['row_limit'],
+                ],
+            },
+            {
+                label: 'Force Layout',
+                controlSetRows: [
+                    ['link_length'],
+                    ['charge'],
+                    ['gravity'],
+                ],
+            },
+        ],
+        controlOverrides: {
+            groupby: {
+                label: 'Hierarchy',
+                description: 'Pick columns in hierarchial order like grand parent, parent, child. Enter atleast 2 columns ',
+            },
+        },
+    },
+
+    coffee_wheel: {
+        label: 'Coffee Wheel',
+        controlPanelSections: [
+            {
+                label: 'Fields',
+                controlSetRows: [
+                    ['groupby'],
+                ]
+            } ,
+        ],
+        controlOverrides: {
+            groupby: {
+                label: 'Hierarchy',
+                description: 'Pick columns in hierarchial order like grand parent, parent, child. Enter atleast 2 columns ',
+            },
+        },
+    },
+
+    pivot_table_threshold_coloring: {
+        label: 'Pivot Table Threshold Coloring',
+        controlPanelSections: [
+            {
+                label: 'Options',
+                controlSetRows: [
+                    ['groupby', 'columns'],
+                    ['metrics', 'pandas_aggfunc'],
+                    ['min_value','max_value'],
+                    ['pivot_color'],
+                ],
+            },
+        ],
+    },
 }
 //UserInput for custom Color Option To Charts
 const visForColor = ["dist_bar", "pie", "line", "dual_line", "bar", "compare", "word_cloud"]//, "treemap", "cal_heatmap", "box_plot", "bubble", "bullet", "big_number", "big_number_total", "histogram"]

@@ -3,6 +3,7 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
+from collections import defaultdict
 from datetime import datetime, timedelta
 import json
 import logging
@@ -30,7 +31,7 @@ from werkzeug.routing import BaseConverter
 
 from superset import (
     appbuilder, cache, db, viz, utils, app,
-    sm, sql_lab, results_backend, security,
+    sm, sql_lab, results_backend, security, viz_extended
 )
 from superset.legacy import cast_form_data
 from superset.utils import has_access, QueryStatus
@@ -174,7 +175,9 @@ class DatabaseView(SupersetModelView, DeleteMixin):  # noqa
         'database_name', 'sqlalchemy_uri', 'cache_timeout', 'extra',
         'expose_in_sqllab', 'allow_run_sync', 'allow_run_async',
         'allow_ctas', 'allow_dml', 'force_ctas_schema']
-    search_exclude_columns = ('password',)
+    search_exclude_columns = (
+        'password', 'tables', 'created_by', 'changed_by', 'queries',
+        'saved_queries', )
     edit_columns = add_columns
     show_columns = [
         'tables',
@@ -316,6 +319,9 @@ class SliceModelView(SupersetModelView, DeleteMixin):  # noqa
     label_columns = {
         'datasource_link': 'Datasource',
     }
+    search_columns = (
+        'slice_name', 'description', 'viz_type', 'owners',
+    )
     list_columns = [
         'slice_link', 'viz_type', 'datasource_link', 'creator', 'modified']
     edit_columns = [
@@ -404,6 +410,7 @@ class DashboardModelView(SupersetModelView, DeleteMixin):  # noqa
         'dashboard_title', 'slug', 'slices', 'owners', 'position_json', 'css',
         'json_metadata']
     show_columns = edit_columns + ['table_names']
+    search_columns = ('dashboard_title', 'slug', 'owners')
     add_columns = edit_columns
     base_order = ('changed_on', 'desc')
     description_columns = {
@@ -1198,8 +1205,10 @@ class Superset(BaseSupersetView):
             .filter_by(id=db_id)
             .one()
         )
+        schemas = database.all_schema_names()
+        schemas = self.schemas_accessible_by_user(database, schemas)
         return Response(
-            json.dumps({'schemas': database.all_schema_names()}),
+            json.dumps({'schemas': schemas}),
             mimetype="application/json")
 
     @api
@@ -2179,7 +2188,6 @@ class Superset(BaseSupersetView):
             .one()
         )
         roles = {}
-        from collections import defaultdict
         permissions = defaultdict(set)
         for role in user.roles:
             perms = set()

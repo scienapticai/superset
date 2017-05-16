@@ -1,5 +1,19 @@
 import control from './controls';
 import React from 'react';
+import { formatSelectOptionsForRange, formatSelectOptions } from '../../modules/utils';
+
+function listGenerator(start,end,step){
+  const arr = [];
+  let element = start;
+  if(step == 0){
+    return arr;
+  }
+  while(element<=end && element>=start){
+    arr.push(element);
+    element+=step;
+  }
+  return arr;
+}
 
 const newControls = {
     // Pie Chart
@@ -72,6 +86,15 @@ const newControls = {
             description: 'Select column containing Y ticks'
     },
 
+    //Collapsible_Force Form Parameters
+    gravity: {
+        type: 'SelectControl',
+        freeForm: true,
+        label: 'Gravity',
+        default: '0.3',
+        choices: formatSelectOptions(listGenerator(0,1,0.05)),
+        description: 'Gravity in the force layout',
+    },
     start_color :{
         type: 'SelectControl',
         label : 'Start Color',
@@ -93,6 +116,15 @@ const newControls = {
         description: 'This is the start color'
     },
 
+    //Pivot Table Threshold Coloring
+    min_value: {
+        type: 'SelectControl',
+        freeForm: true,
+        label: 'lower bound',
+        default: '0',
+        choices: [0, 10, 100, 1000, 10000],
+        description: 'Lower bound for coloring '
+    },
     end_color :{
         type: 'SelectControl',
         label : 'End Color',
@@ -114,6 +146,34 @@ const newControls = {
         description: 'This is the end color'
     },
 
+    max_value: {
+        type: 'SelectControl',
+        freeForm: true,
+        label: 'upper bound',
+        default: '0',
+        choices: [10, 100, 1000, 10000, 100000],
+        description: 'Upper bound for coloring '
+    },
+
+    pivot_color: {
+        type: 'SelectControl',
+        freeForm: true,
+        label: 'color',
+        default: 'black',
+        choices: [
+            ['#4e79a7', 'blue' ],
+            ['#59a14f',	'green'],
+            ['#9c755f',	'brown'],
+            ['#f28e2b',	'orange'],
+            ['#edc948',	'yellow'],
+            ['#bab0ac',	'grey'],
+            ['#e15759',	'red'],
+            ['#b07aa1',	'purple'],
+            ['#76b7b2',	'sky-blue'],
+            ['#ff9da7',	'magenta']
+        ],
+        description: 'Values below min value will be colored with this color'
+    },
     color: {
         type: 'SelectControl',
         label : 'Color',

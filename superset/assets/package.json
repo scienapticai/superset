@@ -1,6 +1,6 @@
 {
   "name": "superset",
-  "version": "0.18.0-alpha.1",
+  "version": "0.18.0-alpha.4",
   "description": "Superset is a data exploration platform designed to be visual, intuitive, and interactive.",
   "license": "Apache-2.0",
   "directories": {
@@ -72,7 +72,6 @@
     "react-alert": "^1.0.14",
     "react-bootstrap": "^0.30.3",
     "react-bootstrap-table": "^3.1.7",
-    "react-color": "^2.11.7",
     "react-dom": "^15.5.1",
     "react-draggable": "^2.1.2",
     "react-gravatar": "^2.6.1",
@@ -89,6 +88,7 @@
     "redux": "^3.5.2",
     "redux-localstorage": "^0.4.1",
     "redux-thunk": "^2.1.0",
+    "save-svg-as-png": "^1.2.0",
     "shortid": "^2.2.6",
     "supercluster": "https://github.com/georgeke/supercluster/tarball/ac3492737e7ce98e07af679623aad452373bbc40",
     "topojson": "^1.6.22",
@@ -135,7 +135,7 @@
     "transform-loader": "^0.2.3",
     "url-loader": "^0.5.7",
     "webpack": "^2.3.3",
-    "webpack-dev-server": "^2.4.5",
-    "webworkify-webpack": "2.0.4"
+    "webworkify-webpack": "2.0.4",
+    "yarn": "^0.23.4"
   }
 }
