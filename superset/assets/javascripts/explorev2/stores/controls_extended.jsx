@@ -72,8 +72,69 @@ const newControls = {
             description: 'Select column containing Y ticks'
     },
 
+    start_color :{
+        type: 'SelectControl',
+        label : 'Start Color',
+        freeForm: true,
+        renderTrigger : true,
+        default: 'red',
+        choices: [
+            ['#4e79a7', 'blue' ],
+            ['#59a14f',	'green'],
+            ['#9c755f',	'brown'],
+            ['#f28e2b',	'orange'],
+            ['#edc948',	'yellow'],
+            ['#bab0ac',	'grey'],
+            ['#e15759',	'red'],
+            ['#b07aa1',	'purple'],
+            ['#76b7b2',	'sky-blue'],
+            ['#ff9da7',	'magenta']
+        ],
+        description: 'This is the start color'
+    },
 
+    end_color :{
+        type: 'SelectControl',
+        label : 'End Color',
+        freeForm: true,
+        renderTrigger : true,
+        default: 'green',
+        choices: [
+            ['#4e79a7', 'blue' ],
+            ['#59a14f',	'green'],
+            ['#9c755f',	'brown'],
+            ['#f28e2b',	'orange'],
+            ['#edc948',	'yellow'],
+            ['#bab0ac',	'grey'],
+            ['#e15759',	'red'],
+            ['#b07aa1',	'purple'],
+            ['#76b7b2',	'sky-blue'],
+            ['#ff9da7',	'magenta']
+        ],
+        description: 'This is the end color'
+    },
 
+    color: {
+        type: 'SelectControl',
+        label : 'Color',
+        freeForm: true,
+        multi: true,
+        renderTrigger : true,
+        default: null,
+        choices: [
+            ['#4e79a7', 'blue' ],
+            ['#59a14f',	'green'],
+            ['#9c755f',	'brown'],
+            ['#f28e2b',	'orange'],
+            ['#edc948',	'yellow'],
+            ['#bab0ac',	'grey'],
+            ['#e15759',	'red'],
+            ['#b07aa1',	'purple'],
+            ['#76b7b2',	'sky-blue'],
+            ['#ff9da7',	'magenta']
+        ],
+        description: 'Choose the list of colors for the chart'
+    },
 
 }
 

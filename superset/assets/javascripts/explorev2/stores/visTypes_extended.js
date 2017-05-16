@@ -11,7 +11,14 @@ const newVisTypes = {
                 ['subregion'],
                 ['metrics'],
             ]
-        }
+        },
+        {
+            label: 'Chart Options',
+            controlSetRows:[
+                ['start_color'],
+                ['end_color']
+            ]
+        },
         ]
       },
 
@@ -37,7 +44,7 @@ const newVisTypes = {
     },
 
     BubbleWithFilterViz:{
-      label: 'Bar chart without group by',
+      label: 'Bubble chart without group by',
       controlPanelSections: [
         {
            controlSetRows: [
@@ -85,9 +92,13 @@ const newVisTypes = {
             },
         }
 
-    }
+    },
 }
-
+//UserInput for custom Color Option To Charts
+const visForColor = ["dist_bar", "pie", "line", "dual_line", "bar", "compare", "word_cloud"]//, "treemap", "cal_heatmap", "box_plot", "bubble", "bullet", "big_number", "big_number_total", "histogram"]
+visForColor.forEach(function(viz){
+    visTypes[viz].controlPanelSections.push({label:'Color Option', controlSetRows: [['color']]});
+});
 
 $.extend(visTypes, newVisTypes);
 

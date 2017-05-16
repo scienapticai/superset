@@ -2,6 +2,7 @@
 import d3 from 'd3';
 import cloudLayout from 'd3-cloud';
 import { category21 } from '../javascripts/modules/colors';
+import {customColor} from "../javascripts/customColors"
 
 function wordCloudChart(slice, payload) {
   const chart = d3.select(slice.selector);
@@ -30,22 +31,39 @@ function wordCloudChart(slice, payload) {
 
   function draw(words) {
     chart.selectAll('*').remove();
-
-    chart.append('svg')
-    .attr('width', layout.size()[0])
-    .attr('height', layout.size()[1])
-    .append('g')
-    .attr('transform', `translate(${layout.size()[0] / 2},${layout.size()[1] / 2})`)
-    .selectAll('text')
-    .data(words)
-    .enter()
-    .append('text')
-    .style('font-size', d => d.size + 'px')
-    .style('font-family', 'Impact')
-    .style('fill', d => category21(d.text))
-    .attr('text-anchor', 'middle')
-    .attr('transform', d => `translate(${d.x}, ${d.y}) rotate(${d.rotate})`)
-    .text(d => d.text);
+    if(slice.formData.color){
+        chart.append('svg')
+        .attr('width', layout.size()[0])
+        .attr('height', layout.size()[1])
+        .append('g')
+        .attr('transform', `translate(${layout.size()[0] / 2},${layout.size()[1] / 2})`)
+        .selectAll('text')
+        .data(words)
+        .enter()
+        .append('text')
+        .style('font-size', d => d.size + 'px')
+        .style('font-family', 'Impact')
+        .style('fill', d => customColor(d.text, slice.formData.color))
+        .attr('text-anchor', 'middle')
+        .attr('transform', d => `translate(${d.x}, ${d.y}) rotate(${d.rotate})`)
+        .text(d => d.text);
+    }else{
+        chart.append('svg')
+        .attr('width', layout.size()[0])
+        .attr('height', layout.size()[1])
+        .append('g')
+        .attr('transform', `translate(${layout.size()[0] / 2},${layout.size()[1] / 2})`)
+        .selectAll('text')
+        .data(words)
+        .enter()
+        .append('text')
+        .style('font-size', d => d.size + 'px')
+        .style('font-family', 'Impact')
+        .style('fill', d => category21(d.text))
+        .attr('text-anchor', 'middle')
+        .attr('transform', d => `translate(${d.x}, ${d.y}) rotate(${d.rotate})`)
+        .text(d => d.text);
+    }
   }
 
   const layout = cloudLayout()
