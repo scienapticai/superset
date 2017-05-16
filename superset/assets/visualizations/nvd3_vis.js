@@ -359,7 +359,6 @@ function nvd3Vis(slice, payload) {
       }
     }
     if (vizType !== 'bullet') {
-      console.log(slice.formData.color);
       if(slice.formData.color){
         chart.color(slice.formData.color);
       }else{
