@@ -239,6 +239,7 @@ function nvd3Vis(slice, payload) {
       case 'compare':
         chart = nv.models.cumulativeLineChart();
         chart.xScale(d3.time.scale.utc());
+        chart.useInteractiveGuideline(true);
         chart.xAxis
         .showMaxMin(false)
         .staggerLabels(true);
@@ -303,7 +304,7 @@ function nvd3Vis(slice, payload) {
       }
     }
 
-    let height = slice.height() - 15;
+    let height = slice.height();
     if (vizType === 'bullet') {
       height = Math.min(height, 50);
       payload = updatePayload(slice,payload);

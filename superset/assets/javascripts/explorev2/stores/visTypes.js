@@ -204,6 +204,12 @@ const visTypes = {
     requiresTime: true,
     controlPanelSections: [
       sections.NVD3TimeSeries[0],
+      {
+        label: 'Chart Options',
+        controlSetRows: [
+          ['x_axis_format', 'y_axis_format'],
+        ],
+      },
       sections.NVD3TimeSeries[1],
     ],
   },
@@ -287,6 +293,7 @@ const visTypes = {
         controlSetRows: [
           ['groupby', 'columns'],
           ['metrics', 'pandas_aggfunc'],
+          ['number_format'],
         ],
       },
     ],
@@ -755,34 +762,6 @@ const visTypes = {
                      'and longitude columns must be present.',
       },
     },
-  },
-
-  collapsible_force: {
-      label: 'Collapsible Force Layout',
-      controlPanelSections: [
-          {
-              label: 'Fields',
-              controlSetRows: [
-                  ['groupby'],
-                  ['metric'],
-                  ['row_limit'],
-              ],
-          },
-          {
-              label: 'Force Layout',
-              controlSetRows: [
-                  ['link_length'],
-                  ['charge'],
-                  ['gravity'],
-              ],
-          },
-      ],
-      controlOverrides: {
-          groupby: {
-              label: 'Hierarchy',
-              description: 'Pick columns in hierarchial order like grand parent, parent, child. Enter atleast 2 columns ',
-          },
-      },
   },
 
 };

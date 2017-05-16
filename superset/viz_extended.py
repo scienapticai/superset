@@ -5,7 +5,8 @@ from flask_babel import lazy_gettext as _
 from superset.viz import BaseViz
 from collections import OrderedDict, defaultdict
 from superset.viz import viz_types
-from superset import app
+from superset import app, utils
+
 import simplejson as json
 config = app.config
 
@@ -196,12 +197,128 @@ class SunburstIntensityViz(BaseViz):
             self.form_data['metric'], self.form_data['secondary_metric']]
         return qry
 
+class CollapsibleForceViz(BaseViz):
+
+    """An animated directed force layout graph visualization"""
+
+    viz_type = "collapsible_force"
+    verbose_name = _("Collapsible Force Layout")
+    credits = 'd3noob @<a href="https://bl.ocks.org/mbostock/1062288">bl.ocks.org</a>'
+    is_timeseries = False
+
+    def query_obj(self):
+        qry = super(CollapsibleForceViz, self).query_obj()
+        if len(self.form_data['groupby']) < 2:
+            raise Exception("Pick atleast 2 columns in Hierarchy Field")
+        qry['metrics'] = [self.form_data['metric']]
+        return qry
+
+    def get_data(self, df):
+        return dict(
+            records=df.to_dict(orient="records"),
+            columns=list(df.columns),
+        )
+
+class CoffeeWheelViz(BaseViz):
+
+    """A multi level CoffeeWheel chart"""
+
+    viz_type = "coffee_wheel"
+    verbose_name = _("Coffee Wheel")
+    is_timeseries = False
+    credits = (
+        'Kerry Rodden '
+        '@<a href="https://bl.ocks.org/kerryrodden/7090426">bl.ocks.org</a>')
+
+    def query_obj(self):
+        d = super(CoffeeWheelViz, self).query_obj()
+        fd = self.form_data
+
+        if fd.get('groupby'):
+            d['columns'] = fd.get('groupby')
+            d['groupby'] = []
+            order_by_cols = fd.get('order_by_cols') or []
+            d['orderby'] = [json.loads(t) for t in order_by_cols]
+        else:
+            raise Exception("Invalid Input : Enter inputs to Hierarchial field ")
+        return d
+
+    def get_df(self, query_obj=None):
+        df = super(CoffeeWheelViz, self).get_df(query_obj)
+        if (
+                        self.form_data.get("granularity") == "all" and
+                        DTTM_ALIAS in df):
+            del df[DTTM_ALIAS]
+        return df
+
+    def get_data(self, df):
+        # df = self.get_df()
+        return dict(
+            records=df.to_dict(orient="records"),
+            columns=list(df.columns),
+            #colors=self.form_data.get("colors"),
+        )
+
+    def json_dumps(self, obj):
+        return json.dumps(obj, default=utils.json_iso_dttm_ser)
+
+
+class PivotTableThreholdColoringViz(BaseViz):
+
+    """A pivot table view, define your rows, columns and metrics"""
+
+    viz_type = "pivot_table_threshold_coloring"
+    verbose_name = _("Pivot Table Threshold Coloring")
+    is_timeseries = False
+
+    def query_obj(self):
+        d = super(PivotTableThreholdColoringViz, self).query_obj()
+        groupby = self.form_data.get('groupby')
+        columns = self.form_data.get('columns')
+        metrics = self.form_data.get('metrics')
+        if not columns:
+            columns = []
+        if not groupby:
+            groupby = []
+        if not groupby:
+            raise Exception("Please choose at least one \"Group by\" field ")
+        if not metrics:
+            raise Exception("Please choose at least one metric")
+        if (
+                    any(v in groupby for v in columns) or
+                    any(v in columns for v in groupby)):
+            raise Exception("groupby and columns can't overlap")
+
+        d['groupby'] = list(set(groupby) | set(columns))
+        return d
+
+    def get_data(self, df):
+        if (
+                        self.form_data.get("granularity") == "all" and
+                        DTTM_ALIAS in df):
+            del df[DTTM_ALIAS]
+        df = df.pivot_table(
+            index=self.form_data.get('groupby'),
+            columns=self.form_data.get('columns'),
+            values=self.form_data.get('metrics'),
+            aggfunc=self.form_data.get('pandas_aggfunc'),
+            margins=True,
+        )
+        return df.to_html(
+            na_rep='',
+            classes=(
+                "dataframe table table-striped table-bordered "
+                "table-condensed table-hover").split(" "))
+
+
 
 viz_types_list.append(UkViz)
 viz_types_list.append(LinePlusBarChartViz)
 viz_types_list.append(BubbleWithFilterViz)
 viz_types_list.append(SunburstIntensityViz)
-
+viz_types_list.append(CollapsibleForceViz)
+viz_types_list.append(CoffeeWheelViz)
+viz_types_list.append(PivotTableThreholdColoringViz)
 
 for v in viz_types_list:
     if v.viz_type not in config.get('VIZ_TYPE_BLACKLIST'):

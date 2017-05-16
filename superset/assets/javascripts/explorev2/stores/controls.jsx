@@ -551,7 +551,8 @@ export const controls = {
     type: 'SelectControl',
     freeForm: true,
     label: 'Number format',
-    default: D3_TIME_FORMAT_OPTIONS[0],
+    renderTrigger: true,
+    default: '.3s',
     choices: D3_TIME_FORMAT_OPTIONS,
     description: D3_FORMAT_DOCS,
   },
@@ -1208,14 +1209,5 @@ export const controls = {
     description: 'The number of seconds before expiring the cache',
   },
 
-  gravity: {
-      type: 'SelectControl',
-      freeForm: true,
-      label: 'Gravity',
-      default: '0.2',
-      choices: formatSelectOptions(['0.05','0.1','0.15','0.2','0.25','0.3','0.35','0.4','0.45','0.5','0.55','0.6','0.65',
-          '0.7','0.75','0.8','0.85','0.9','0.95','1.0',]),
-      description: 'Gravity in the force layout',
-  },
 };
 export default controls;
