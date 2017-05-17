@@ -3,7 +3,7 @@ var topojson = require("topojson");
 var px = window.px || require("../javascripts/modules/superset.js");
 var mapJson = require("../../data/uk_shape.json");
 var utils = require("../javascripts/modules/utils");
-require("./uk_vis.css");
+import {validateColorHexCodes} from "../javascripts/inputValidators"
 require("./uk_vis.css");
 require("d3-tip");
 
@@ -33,9 +33,23 @@ function UkViz(slice, json) {
         }
     }
 
+    var chartName = "chart"+slice.selector
 
-    var startColor = "red";
-    var stopColor = "green";
+    div.html("");
+
+    var startColor = slice.formData.start_color ? slice.formData.start_color: "red";
+    var stopColor = slice.formData.end_color ? slice.formData.end_color : "green";
+
+    //Validating the UserInput By FreeForm Select Hex Codes
+    if(startColor !== "red" || stopColor !== "green"){
+        if(!validateColorHexCodes(startColor)){
+            //TODO: Error Handling
+            //slice.error("Invalid Hex Code for StartColor", "Invalid Hex Code for StartColor");
+        }else if(!validateColorHexCodes(stopColor)){
+            //TODO: Error Handling
+            //slice.error("Invalid Hex Code for StopColor", "Invalid Hex Code for StopColor");
+        }
+    }
     var color = d3.scale.linear()
     .domain([min,max])
     .range([startColor,stopColor]);
@@ -54,9 +68,7 @@ function UkViz(slice, json) {
     var path = d3.geo.path()
     .projection(projection);
 
-    var chartName = "chart"+slice.selector
 
-    div.html("");
     var svg = div.append("svg")
               .attr("width", width)
               .attr("height", height);
@@ -135,7 +147,7 @@ function UkViz(slice, json) {
         }
 
         g.selectAll("path")
-        .classed("active", centered && function(d) { console.log(d === centered);return d === centered; });
+        .classed("active", centered && function(d) { return d === centered; });
 
         g.transition()
         .duration(750)

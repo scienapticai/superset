@@ -72,6 +72,8 @@ function nvd3VisExtended(slice, payload) {
   let row;
 
   const drawGraph = function () {
+
+    var chart_data;
     let svg = d3.select(slice.selector).select('svg');
     if (svg.empty()) {
       svg = d3.select(slice.selector).append('svg');
@@ -111,7 +113,6 @@ function nvd3VisExtended(slice, payload) {
                 s += "</table>";
                 return s;
           });
-
           chart.pointRange([5, fd.max_bubble_size * fd.max_bubble_size]);
           var y_array = Object.keys(payload.data.y_ticks_map);
           if (Object.keys(payload.data.y_ticks_map).length > 0){
@@ -209,8 +210,11 @@ function nvd3VisExtended(slice, payload) {
             } else {
               chart.margin({ bottom: fd.bottom_margin });
             }
-            svg
-                .datum(payload.data)
+
+            chart_data = payload.data.chart_data ? payload.data.chart_data : payload.data;
+
+                svg
+                .datum(chart_data)
                 .transition().duration(500)
                 .attr('height', height)
                 .attr('width', width)
@@ -258,12 +262,14 @@ function nvd3VisExtended(slice, payload) {
                   }
 
                   // render chart
-                  svg
-                  .datum(payload.data)
-                  .transition().duration(500)
-                  .attr('height', height)
-                  .attr('width', width)
-                  .call(chart);
+
+                    svg
+                    .datum(chart_data)
+                    .transition().duration(500)
+                    .attr('height', height)
+                    .attr('width', width)
+                    .call(chart);
+
                 }
 
                 // on scroll, hide tooltips. throttle to only 4x/second.

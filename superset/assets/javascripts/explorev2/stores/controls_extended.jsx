@@ -2,7 +2,7 @@ import control from './controls';
 import React from 'react';
 import $ from 'jquery'
 import { formatSelectOptionsForRange, formatSelectOptions } from '../../modules/utils';
-
+import {bnbColorsWithNames} from "../../customColors"
 
 const SIZE_FROM = listGenerator(10,60,10);
 
@@ -126,7 +126,7 @@ const newControls = {
                         choices: (state.datasource) ? state.datasource.gb_cols : [],
             }),
             description: 'Select column containing Y ticks'
-    }
+    },
 
     //Collapsible_Force Form Parameters
     gravity: {
@@ -137,6 +137,15 @@ const newControls = {
         choices: formatSelectOptions(listGenerator(0,1,0.05)),
         description: 'Gravity in the force layout',
     },
+    start_color :{
+        type: 'SelectControl',
+        label : 'Start Color',
+        freeForm: true,
+        renderTrigger : true,
+        default: 'red',
+        choices: bnbColorsWithNames,
+        description: 'This is the start color'
+    },
 
     //Pivot Table Threshold Coloring
     min_value: {
@@ -146,6 +155,15 @@ const newControls = {
         default: '0',
         choices: [0, 10, 100, 1000, 10000],
         description: 'Lower bound for coloring '
+    },
+    end_color :{
+        type: 'SelectControl',
+        label : 'End Color',
+        freeForm: true,
+        renderTrigger : true,
+        default: 'green',
+        choices: bnbColorsWithNames,
+        description: 'This is the end color'
     },
 
     max_value: {
@@ -162,19 +180,18 @@ const newControls = {
         freeForm: true,
         label: 'color',
         default: 'black',
-        choices: [
-            ['#4e79a7', 'blue' ],
-            ['#59a14f',	'green'],
-            ['#9c755f',	'brown'],
-            ['#f28e2b',	'orange'],
-            ['#edc948',	'yellow'],
-            ['#bab0ac',	'grey'],
-            ['#e15759',	'red'],
-            ['#b07aa1',	'purple'],
-            ['#76b7b2',	'sky-blue'],
-            ['#ff9da7',	'magenta']
-        ],
+        choices: bnbColorsWithNames,
         description: 'Values below min value will be colored with this color'
+    },
+    color: {
+        type: 'SelectControl',
+        label : 'Color',
+        freeForm: true,
+        multi: true,
+        renderTrigger : true,
+        default: null,
+        choices: bnbColorsWithNames,
+        description: 'Choose the list of colors for the chart'
     },
 
 }

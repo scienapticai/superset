@@ -3,6 +3,7 @@ import $ from 'jquery';
 import d3 from 'd3';
 import cloudLayout from 'd3-cloud';
 import { category21 } from '../javascripts/modules/colors';
+import {customColor} from "../javascripts/customColors"
 import { SIZE_FROM, SIZE_TO } from '../javascripts/explorev2/stores/controls_extended';
 
 
@@ -38,6 +39,8 @@ function wordCloudChart(slice, payload) {
   function draw(words) {
     chart.selectAll('*').remove();
 
+    var colorConditionalStatement = slice.formData.color ? slice.formData.color.length : slice.formData.color;
+
     chart.append('svg')
     .attr('width', layout.size()[0])
     .attr('height', layout.size()[1])
@@ -49,7 +52,7 @@ function wordCloudChart(slice, payload) {
     .append('text')
     .style('font-size', d => d.size + 'px')
     .style('font-family', 'Impact')
-    .style('fill', d => category21(d.text))
+    .style('fill', colorConditionalStatement ? d => customColor(d.text, slice.formData.color) : d => category21(d.text))
     .attr('text-anchor', 'middle')
     .attr('transform', d => `translate(${d.x}, ${d.y}) rotate(${d.rotate})`)
     .text(d => d.text);

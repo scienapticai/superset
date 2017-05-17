@@ -364,7 +364,11 @@ function nvd3Vis(slice, payload) {
       }
     }
     if (vizType !== 'bullet') {
-      chart.color(d => category21(d[colorKey]));
+      if(slice.formData.color){
+        chart.color(slice.formData.color);
+      }else{
+        chart.color(d => category21(d[colorKey]));
+      }
     }
 
     if (fd.x_axis_label && fd.x_axis_label !== '' && chart.xAxis) {
