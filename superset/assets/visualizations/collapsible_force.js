@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import d3 from 'd3';
+import { updatePayload } from './dynamic_update';
 import { bnbColors } from '../javascripts/modules/colors';
 
 
@@ -113,6 +114,8 @@ function collapsibleForceVis(slice, json) {
         });
 
     var root, min=width/500, max=width/50;
+
+    json = updatePayload(slice,json);
 
     var force = d3.layout.force()
         .linkDistance(parseFloat(json.form_data.link_length))
@@ -246,13 +249,11 @@ function collapsibleForceVis(slice, json) {
 
     if(typeof(root.length) == "undefined"){
         overallMax = findMax(root,0);
-        // overallMax = findMaxSize(root);
     }
     else{
         var i=0;
         for(i=0;i<root.length;i++){
             overallMax = Math.max(overallMax,findMax(root[i],0));
-            // overallMax = Math.max(overallMax,findMaxSize(root[i]));
         }
     }
 

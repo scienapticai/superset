@@ -37,8 +37,9 @@ function UkViz(slice, json) {
 
     div.html("");
 
-    var startColor = slice.formData.start_color;
-    var stopColor = slice.formData.end_color;
+    var startColor = slice.formData.start_color ? slice.formData.start_color: "red";
+    var stopColor = slice.formData.end_color ? slice.formData.end_color : "green";
+
     //Validating the UserInput By FreeForm Select Hex Codes
     if(startColor !== "red" || stopColor !== "green"){
         if(!validateColorHexCodes(startColor)){

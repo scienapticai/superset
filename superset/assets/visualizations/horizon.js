@@ -195,14 +195,19 @@ function horizonViz(slice, payload) {
   const div = d3.select(slice.selector);
   div.selectAll('*').remove();
   let extent;
+
+  const data = payload.data.map(item => $.extend(true,{},item));
+
+
   if (fd.horizon_color_scale === 'overall') {
     let allValues = [];
-    payload.data.forEach(function (d) {
+
+    data.forEach(function (d) {
       allValues = allValues.concat(d.values);
     });
     extent = d3.extent(allValues, d => d.y);
   } else if (fd.horizon_color_scale === 'change') {
-    payload.data.forEach(function (series) {
+    data.forEach(function (series) {
       const t0y = series.values[0].y;  // value at time 0
       series.values = series.values.map(d =>
         Object.assign({}, d, { y: d.y - t0y }),
@@ -210,7 +215,7 @@ function horizonViz(slice, payload) {
     });
   }
   div.selectAll('.horizon')
-  .data(payload.data)
+  .data(data)
   .enter()
   .append('div')
   .attr('class', 'horizon')
