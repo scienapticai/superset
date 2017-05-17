@@ -72,6 +72,8 @@ function nvd3VisExtended(slice, payload) {
   let row;
 
   const drawGraph = function () {
+
+    var chart_data;
     let svg = d3.select(slice.selector).select('svg');
     if (svg.empty()) {
       svg = d3.select(slice.selector).append('svg');
@@ -208,21 +210,15 @@ function nvd3VisExtended(slice, payload) {
             } else {
               chart.margin({ bottom: fd.bottom_margin });
             }
-            if (vizType == 'BubbleWithFilterViz'){
+
+            chart_data = payload.data.chart_data ? payload.data.chart_data : payload.data;
+
                 svg
-                .datum(payload.data.chart_data)
+                .datum(chart_data)
                 .transition().duration(500)
                 .attr('height', height)
                 .attr('width', width)
                 .call(chart);
-            }else{
-                svg
-                .datum(payload.data)
-                .transition().duration(500)
-                .attr('height', height)
-                .attr('width', width)
-                .call(chart);
-             }
 
                 if (fd.show_markers) {
                   svg.selectAll('.nv-point')
@@ -266,21 +262,14 @@ function nvd3VisExtended(slice, payload) {
                   }
 
                   // render chart
-                  if (vizType == 'BubbleWithFilterViz'){
+
                     svg
-                    .datum(payload.data.chart_data)
+                    .datum(chart_data)
                     .transition().duration(500)
                     .attr('height', height)
                     .attr('width', width)
                     .call(chart);
-                  }else{
-                      svg
-                      .datum(payload.data)
-                      .transition().duration(500)
-                      .attr('height', height)
-                      .attr('width', width)
-                      .call(chart);
-                  }
+
                 }
 
                 // on scroll, hide tooltips. throttle to only 4x/second.
