@@ -88,6 +88,7 @@ const visTypes = {
           ['bar_stacked', 'order_bars'],
           ['y_axis_format', 'bottom_margin'],
           ['x_axis_label', 'y_axis_label'],
+          ['margin_left', 'legend_margin_bottom'],
           ['reduce_x_ticks', 'contribution'],
           ['show_controls'],
         ],
