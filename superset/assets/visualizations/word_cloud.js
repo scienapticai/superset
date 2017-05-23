@@ -1,16 +1,24 @@
 /* eslint-disable  no-use-before-define */
+import $ from 'jquery';
 import d3 from 'd3';
 import cloudLayout from 'd3-cloud';
 import { category21 } from '../javascripts/modules/colors';
+import {customColor} from "../javascripts/customColors"
+import { SIZE_FROM, SIZE_TO } from '../javascripts/explorev2/stores/controls_extended';
+
+
+
 
 function wordCloudChart(slice, payload) {
   const chart = d3.select(slice.selector);
-  const data = payload.data;
   const fd = slice.formData;
-  const range = [
-    fd.size_from,
-    fd.size_to,
-  ];
+
+    const data = payload.data.map(item => $.extend(true,{},item));
+
+    const size_from = (isNaN(fd.size_from) ? SIZE_FROM[0] : fd.size_from).toString();
+    const size_to = (isNaN(fd.size_to) ? SIZE_TO[0] : fd.size_to).toString();
+    const range = [size_from, size_to];
+
   const rotation = fd.rotation;
   let fRotation;
   if (rotation === 'square') {
@@ -31,6 +39,8 @@ function wordCloudChart(slice, payload) {
   function draw(words) {
     chart.selectAll('*').remove();
 
+    var colorConditionalStatement = slice.formData.color ? slice.formData.color.length : slice.formData.color;
+
     chart.append('svg')
     .attr('width', layout.size()[0])
     .attr('height', layout.size()[1])
@@ -42,7 +52,7 @@ function wordCloudChart(slice, payload) {
     .append('text')
     .style('font-size', d => d.size + 'px')
     .style('font-family', 'Impact')
-    .style('fill', d => category21(d.text))
+    .style('fill', colorConditionalStatement ? d => customColor(d.text, slice.formData.color) : d => category21(d.text))
     .attr('text-anchor', 'middle')
     .attr('transform', d => `translate(${d.x}, ${d.y}) rotate(${d.rotate})`)
     .text(d => d.text);

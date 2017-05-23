@@ -1,48 +1,90 @@
 import control from './controls';
 import React from 'react';
+import $ from 'jquery'
 import { formatSelectOptionsForRange, formatSelectOptions } from '../../modules/utils';
+import {bnbColorsWithNames} from "../../customColors"
+
+const SIZE_FROM = listGenerator(10,60,10);
+
+const SIZE_TO = listGenerator(70,110,10);
 
 function listGenerator(start,end,step){
-  const arr = [];
-  let element = start;
-  if(step == 0){
+    const arr = [];
+    let element = start;
+    if(step == 0){
+        return arr;
+    }
+    while(element<=end && element>=start){
+        arr.push(element);
+        element+=step;
+    }
     return arr;
-  }
-  while(element<=end && element>=start){
-    arr.push(element);
-    element+=step;
-  }
-  return arr;
 }
+
 
 const newControls = {
     // Pie Chart
-    donut: Object.assign({},control.donut, { renderTrigger : true }),
+    donut : updateControls(control.donut,{ renderTrigger : true }),
+    labels_outside : updateControls(control.labels_outside,{ renderTrigger : true }),
 
     // Dual Axis Line Chart
-    y_axis_2_format: Object.assign({},control.y_axis_2_format, { renderTrigger : true }),
+    y_axis_2_format: updateControls(control.y_axis_2_format,{ renderTrigger : true }),
 
     // Stacked
-    stacked_style: Object.assign({},control.stacked_style, { renderTrigger : true }),
+    stacked_style: updateControls(control.stacked_style, { renderTrigger : true }),
 
     // Table View
-    table_timestamp_format: Object.assign({},control.table_timestamp_format,{ renderTrigger : true }),
-    page_length: Object.assign({},control.page_length,{ renderTrigger : true }),
+    table_timestamp_format: updateControls(control.table_timestamp_format,{ renderTrigger : true }),
+    page_length: updateControls(control.page_length,{ renderTrigger : true }),
 
     //Word Cloud
-    rotation: Object.assign({},control.rotation,{ renderTrigger : true }),
+    rotation: updateControls(control.rotation,{ renderTrigger : true }),
+    size_from: updateControls(control.size_from,{ renderTrigger : true,type: 'SelectControl', freeForm: true,
+                                                    choices : SIZE_FROM }),
+    size_to: updateControls(control.size_to,{ renderTrigger : true,type: 'SelectControl', freeForm: true,
+                                                    choices : SIZE_TO }),
 
     //TreeMap
-    number_format: Object.assign({},control.number_format,{ renderTrigger : true }),
+    number_format: updateControls(control.number_format,{ renderTrigger : true }),
+    treemap_ratio: updateControls(control.treemap_ratio,{ renderTrigger : true }),
 
     //Filter Box
-    date_filter: Object.assign({},control.date_filter,{ renderTrigger : true }),
+    date_filter: updateControls(control.date_filter,{ renderTrigger : true }),
 
     //HeatMap
-    linear_color_scheme: Object.assign({},control.linear_color_scheme,{ renderTrigger : true }),
-    xscale_interval: Object.assign({},control.xscale_interval,{ renderTrigger : true }),
-    yscale_interval: Object.assign({},control.yscale_interval,{ renderTrigger : true }),
-    canvas_image_rendering: Object.assign({},control.canvas_image_rendering,{ renderTrigger : true }),
+    linear_color_scheme: updateControls(control.linear_color_scheme,{ renderTrigger : true }),
+    xscale_interval: updateControls(control.xscale_interval,{ renderTrigger : true }),
+    yscale_interval: updateControls(control.yscale_interval,{ renderTrigger : true }),
+    canvas_image_rendering: updateControls(control.canvas_image_rendering,{ renderTrigger : true }),
+
+    //Force Layout
+    link_length: updateControls(control.link_length,{ renderTrigger : true }),
+    charge: updateControls(control.charge,{ renderTrigger : true }),
+
+    //Bullet Chart
+    markers: updateControls(control.markers,{ renderTrigger : true }),
+    marker_labels: updateControls(control.marker_labels,{ renderTrigger : true }),
+    marker_lines: updateControls(control.marker_lines,{ renderTrigger : true }),
+    marker_line_labels: updateControls(control.marker_line_labels,{ renderTrigger : true }),
+    ranges: updateControls(control.ranges,{ renderTrigger : true }),
+    range_labels: updateControls(control.range_labels,{ renderTrigger : true }),
+
+    //Bubble Chart
+    max_bubble_size: updateControls(control.max_bubble_size,{ renderTrigger : true }),
+
+    //Big Number
+    subheader: updateControls(control.subheader,{ renderTrigger : true }),
+
+    //Parallel Coordinates
+    show_datatable: updateControls(control.show_datatable,{ renderTrigger : true }),
+
+    //Horizon
+    series_height: updateControls(control.series_height,{ renderTrigger : true }),
+    horizon_color_scale: updateControls(control.horizon_color_scale,{ renderTrigger : true }),
+
+    //Collapsible Force Layout
+    gravity: updateControls(control.gravity,{ renderTrigger : true }),
+
 
     //UKMapViz Form Parameters
     subregion:{
@@ -95,6 +137,15 @@ const newControls = {
         choices: formatSelectOptions(listGenerator(0,1,0.05)),
         description: 'Gravity in the force layout',
     },
+    start_color :{
+        type: 'SelectControl',
+        label : 'Start Color',
+        freeForm: true,
+        renderTrigger : true,
+        default: 'red',
+        choices: bnbColorsWithNames,
+        description: 'This is the start color'
+    },
 
     //Pivot Table Threshold Coloring
     min_value: {
@@ -104,6 +155,15 @@ const newControls = {
         default: '0',
         choices: [0, 10, 100, 1000, 10000],
         description: 'Lower bound for coloring '
+    },
+    end_color :{
+        type: 'SelectControl',
+        label : 'End Color',
+        freeForm: true,
+        renderTrigger : true,
+        default: 'green',
+        choices: bnbColorsWithNames,
+        description: 'This is the end color'
     },
 
     max_value: {
@@ -120,19 +180,18 @@ const newControls = {
         freeForm: true,
         label: 'color',
         default: 'black',
-        choices: [
-            ['#4e79a7', 'blue' ],
-            ['#59a14f',	'green'],
-            ['#9c755f',	'brown'],
-            ['#f28e2b',	'orange'],
-            ['#edc948',	'yellow'],
-            ['#bab0ac',	'grey'],
-            ['#e15759',	'red'],
-            ['#b07aa1',	'purple'],
-            ['#76b7b2',	'sky-blue'],
-            ['#ff9da7',	'magenta']
-        ],
+        choices: bnbColorsWithNames,
         description: 'Values below min value will be colored with this color'
+    },
+    color: {
+        type: 'SelectControl',
+        label : 'Color',
+        freeForm: true,
+        multi: true,
+        renderTrigger : true,
+        default: null,
+        choices: bnbColorsWithNames,
+        description: 'Choose the list of colors for the chart'
     },
 
     //Distribution bar
@@ -158,7 +217,12 @@ const newControls = {
 
 }
 
+const controls = updateControls(control, newControls);
 
-const controls = Object.assign({}, control, newControls );
+function updateControls(source, newFields) {
+    return $.extend(true,{},source,newFields);
+
+}
 
 export default controls;
+export  { SIZE_FROM , SIZE_TO };

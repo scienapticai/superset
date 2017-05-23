@@ -4,6 +4,10 @@
   pointer-events: all;
 }
 
+.UkViz path{
+  stroke-width: 0.5;
+}
+
 #states .active {
   opacity: 0.8;
 }
