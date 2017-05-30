@@ -46,6 +46,7 @@ const addTotalBarValues = function (svg, chart, data, stacked, axisFormat) {
       return i === countSeriesDisplayed - 1;
     }).selectAll('rect.positive');
 
+  svg.select('g.nv-barsWrap').selectAll('.bar-chart-label').remove();
   const groupLabels = svg.select('g.nv-barsWrap').append('g');
   rectsToBeLabeled.each(
     function (d, index) {
@@ -122,6 +123,8 @@ function nvd3Vis(slice, payload) {
   const reduceXTicks = fd.reduce_x_ticks || false;
   let stacked = false;
   let row;
+  let ch_margin_left;
+  let leg_margin_bottom;
 
   const drawGraph = function () {
     let svg = d3.select(slice.selector).select('svg');
@@ -208,6 +211,11 @@ function nvd3Vis(slice, payload) {
           width = barchartWidth();
         }
         chart.width(width);
+
+        ch_margin_left = parseInt(fd.margin_left) || 0;
+        leg_margin_bottom = parseInt(fd.legend_margin_bottom) || 0;
+        chart.legend.margin().bottom = leg_margin_bottom;
+        chart.margin({ "left": ch_margin_left });
         break;
 
       case 'pie':
@@ -389,7 +397,7 @@ function nvd3Vis(slice, payload) {
         const stretchMargin = calculateStretchMargins(payload);
         chart.margin({ bottom: stretchMargin });
       } else {
-        chart.margin({ bottom: 50 });
+        chart.margin({ bottom: 50});
       }
     } else {
       chart.margin({ bottom: fd.bottom_margin });
@@ -461,6 +469,14 @@ function nvd3Vis(slice, payload) {
       .call(chart);
     }
 
+    d3.select(slice.selector).select("g.nvd3.nv-legend").selectAll("circle.nv-legend-symbol")
+        .on("click.namespace", function (d) {
+          if (fd.show_bar_value) {
+              setTimeout(function () {
+                addTotalBarValues(svg, chart, payload.data, stacked, fd.y_axis_format);
+              }, animationTime);
+          }
+    });
     // on scroll, hide tooltips. throttle to only 4x/second.
     $(window).scroll(throttle(hideTooltips, 250));
 

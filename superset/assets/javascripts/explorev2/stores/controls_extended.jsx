@@ -194,6 +194,27 @@ const newControls = {
         description: 'Choose the list of colors for the chart'
     },
 
+    //Distribution bar
+    margin_left: {
+        type: 'SelectControl',
+        freeForm: true,
+        renderTrigger: true,
+        label: 'Margin Left',
+        default: 10,
+        choices: [0, 10, 25, 50, 100],
+        description: 'Left side margin of chart'
+    },
+
+    legend_margin_bottom: {
+        type: 'SelectControl',
+        freeForm: true,
+        renderTrigger: true,
+        label: 'Legend Margin Bottom',
+        default: 10,
+        choices: [0, 10, 25, 50, 100],
+        description: 'Bottom margin for legend',
+    },
+
 }
 
 const controls = updateControls(control, newControls);

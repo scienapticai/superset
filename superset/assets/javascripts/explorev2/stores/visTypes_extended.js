@@ -161,6 +161,27 @@ visForColor.forEach(function(viz){
     visTypes[viz].controlPanelSections.push({label:'Color Option', controlSetRows: [['color']]});
 });
 
+
+function assignValueToFirstNullLabel(visTypes){
+    const viz = Object.keys(visTypes);
+    const newVisType = viz.map(function(vizType){
+        const vizObject = visTypes[vizType];
+        if (Array.isArray(vizObject.controlPanelSections)) {
+            if (vizObject.controlPanelSections[0].label == null) {
+                vizObject.controlPanelSections[0].label = 'Fields';
+            }
+        }
+        else {
+            if (vizObject.controlPanelSections.label == null) {
+                vizObject.controlPanelSections.label = 'Fields';
+            }
+        }
+        return vizObject;
+    });
+    return newVisType;
+}
+
+$.extend(visTypes,assignValueToFirstNullLabel(visTypes));
 $.extend(visTypes, newVisTypes);
 
 export default visTypes;

@@ -10,6 +10,7 @@ import QueryAndSaveBtns from './QueryAndSaveBtns';
 import { getExploreUrl } from '../exploreUtils';
 import * as actions from '../actions/exploreActions';
 import { getFormDataFromControls } from '../stores/store';
+import '../../../stylesheets/explore_extended.css'
 
 const propTypes = {
   actions: PropTypes.object.isRequired,
@@ -156,7 +157,7 @@ class ExploreViewContainer extends React.Component {
         />
       }
         <div className="row">
-          <div className="col-sm-4">
+          <div className="col-sm-4" id="explore-left-panel">
             <QueryAndSaveBtns
               canAdd="True"
               onQuery={this.onQuery.bind(this)}
@@ -172,7 +173,7 @@ class ExploreViewContainer extends React.Component {
               datasource_type={this.props.datasource_type}
             />
           </div>
-          <div className="col-sm-8">
+          <div className="col-sm-8" id="explore-right-panel">
             {this.renderChartContainer()}
           </div>
         </div>

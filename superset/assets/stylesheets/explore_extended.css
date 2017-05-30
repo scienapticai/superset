@@ -1,0 +1,31 @@
+.no-text-decor{
+    text-decoration: none !important;
+}
+
+.panel-title.no-bor-bot{
+    border-bottom: none;
+}
+
+.top-bor{
+    border-top: 1px solid #b3b3b3;
+}
+
+.panel-heading.b-p75{
+    padding-bottom: 0.75em;
+}
+
+.panel-heading.panel-hover:hover{
+    background-color: rgb(238,238,238);
+}
+
+.p-b-30 {
+    padding-bottom: 30px;
+}
+
+svg.nvd3-svg {
+    padding-left: 30px;
+}
+
+
+
+

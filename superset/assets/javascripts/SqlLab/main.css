@@ -102,6 +102,9 @@ div.Workspace {
 .m-b-10 {
     margin-bottom: 10px;
 }
+.m-b-30 {
+    margin-bottom: 30px;
+}
 .m-t-5 {
     margin-top: 5px;
 }
@@ -110,6 +113,9 @@ div.Workspace {
 }
 .p-t-10 {
     padding-top: 10px;
+}
+.p-b-30 {
+    padding-bottom: 30px;
 }
 .sqllab-toolbar {
     padding-top: 5px;
