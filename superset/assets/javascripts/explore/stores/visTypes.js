@@ -44,14 +44,14 @@ export const sections = {
     {
       label: 'Advanced Analytics',
       description: 'This section contains options ' +
-                   'that allow for advanced analytical post processing ' +
-                    'of query results',
+      'that allow for advanced analytical post processing ' +
+      'of query results',
       controlSetRows: [
-          ['rolling_type', 'rolling_periods'],
-          ['time_compare'],
-          ['num_period_compare', 'period_ratio_type'],
-          ['resample_how', 'resample_rule'],
-          ['resample_fillmethod'],
+        ['rolling_type', 'rolling_periods'],
+        ['time_compare'],
+        ['num_period_compare', 'period_ratio_type'],
+        ['resample_how', 'resample_rule'],
+        ['resample_fillmethod'],
       ],
     },
   ],
@@ -59,15 +59,15 @@ export const sections = {
     {
       label: 'Filters',
       description: 'Filters are defined using comma delimited strings as in <US,FR,Other>' +
-        'Leave the value control empty to filter empty strings or nulls' +
-        'For filters with comma in values, wrap them in single quotes' +
-        "as in <NY, 'Tahoe, CA', DC>",
+      'Leave the value control empty to filter empty strings or nulls' +
+      'For filters with comma in values, wrap them in single quotes' +
+      "as in <NY, 'Tahoe, CA', DC>",
       controlSetRows: [['filters']],
     },
     {
       label: 'Result Filters',
       description: 'The filters to apply after post-aggregation.' +
-        'Leave the value control empty to filter empty strings or nulls',
+      'Leave the value control empty to filter empty strings or nulls',
       controlSetRows: [['having_filters']],
     },
   ],
@@ -314,10 +314,10 @@ const visTypes = {
     controlOverrides: {
       code: {
         default: '####Section Title\n' +
-                 'A paragraph describing the section' +
-                 'of the dashboard, right before the separator line ' +
-                 '\n\n' +
-                 '---------------',
+        'A paragraph describing the section' +
+        'of the dashboard, right before the separator line ' +
+        '\n\n' +
+        '---------------',
       },
     },
   },
@@ -518,8 +518,8 @@ const visTypes = {
       secondary_metric: {
         label: 'Secondary Metric',
         description: 'This secondary metric is used to ' +
-                     'define the color as a ratio against the primary metric. ' +
-                     'If the two metrics match, color is mapped level groups',
+        'define the color as a ratio against the primary metric. ' +
+        'If the two metrics match, color is mapped level groups',
       },
       groupby: {
         label: 'Hierarchy',
@@ -574,7 +574,30 @@ const visTypes = {
       },
     },
   },
-
+  country_map: {
+    label: 'Country Map',
+    controlPanelSections: [
+      {
+        label: null,
+        controlSetRows: [
+          ['select_country'],
+          ['entity'],
+          ['metric'],
+          ['linear_color_scheme'],
+        ],
+      },
+    ],
+    controlOverrides: {
+      entity: {
+        label: 'ISO 3166-1 codes of region/province/department',
+        description: "It's ISO 3166-1 of your region/province/department in your table. (see documentation for list of ISO 3166-1)",
+      },
+      metric: {
+        label: 'Metric',
+        description: 'Metric to display bottom title',
+      },
+    },
+  },
   world_map: {
     label: 'World Map',
     controlPanelSections: [
@@ -752,16 +775,16 @@ const visTypes = {
       pandas_aggfunc: {
         label: 'Cluster label aggregator',
         description: 'Aggregate function applied to the list of points ' +
-                     'in each cluster to produce the cluster label.',
+        'in each cluster to produce the cluster label.',
       },
       rich_tooltip: {
         label: 'Tooltip',
         description: 'Show a tooltip when hovering over points and clusters ' +
-                     'describing the label',
+        'describing the label',
       },
       groupby: {
         description: 'One or many controls to group by. If grouping, latitude ' +
-                     'and longitude columns must be present.',
+        'and longitude columns must be present.',
       },
     },
   },

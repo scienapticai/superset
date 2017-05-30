@@ -296,8 +296,6 @@ function nvd3Vis(slice, payload) {
 
       case 'bullet':
         chart = nv.models.bulletChart();
-
-
         break;
 
       default:
@@ -397,7 +395,7 @@ function nvd3Vis(slice, payload) {
         const stretchMargin = calculateStretchMargins(payload);
         chart.margin({ bottom: stretchMargin });
       } else {
-        chart.margin({ bottom: 50});
+        chart.margin({ bottom: 50 });
       }
     } else {
       chart.margin({ bottom: fd.bottom_margin });
@@ -411,7 +409,7 @@ function nvd3Vis(slice, payload) {
       customizeToolTip(chart, xAxisFormatter, [yAxisFormatter1, yAxisFormatter2]);
       chart.showLegend(width > BREAKPOINTS.small);
     }
-      svg
+    svg
     .datum(payload.data)
     .transition().duration(500)
     .attr('height', height)
@@ -460,7 +458,7 @@ function nvd3Vis(slice, payload) {
         chart.margin({ bottom: maxXAxisLabelHeight + marginPad + 25 });
       }
 
-        // render chart
+      // render chart
       svg
       .datum(payload.data)
       .transition().duration(500)
@@ -469,14 +467,6 @@ function nvd3Vis(slice, payload) {
       .call(chart);
     }
 
-    d3.select(slice.selector).select("g.nvd3.nv-legend").selectAll("circle.nv-legend-symbol")
-        .on("click.namespace", function (d) {
-          if (fd.show_bar_value) {
-              setTimeout(function () {
-                addTotalBarValues(svg, chart, payload.data, stacked, fd.y_axis_format);
-              }, animationTime);
-          }
-    });
     // on scroll, hide tooltips. throttle to only 4x/second.
     $(window).scroll(throttle(hideTooltips, 250));
 
