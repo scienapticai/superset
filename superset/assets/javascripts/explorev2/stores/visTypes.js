@@ -9,6 +9,7 @@ export const sections = {
   },
   datasourceAndVizType: {
     label: 'Datasource & Chart Type',
+    description: 'Pick visualization type, datasource',
     controlSetRows: [
       ['datasource'],
       ['viz_type'],

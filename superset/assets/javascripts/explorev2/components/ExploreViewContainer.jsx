@@ -10,6 +10,7 @@ import QueryAndSaveBtns from './QueryAndSaveBtns';
 import { getExploreUrl } from '../exploreUtils';
 import * as actions from '../actions/exploreActions';
 import { getFormDataFromControls } from '../stores/store';
+import '../../../stylesheets/explore_extended.css'
 
 const propTypes = {
   actions: PropTypes.object.isRequired,
@@ -30,7 +31,6 @@ class ExploreViewContainer extends React.Component {
       height: this.getHeight(),
       showModal: false,
     };
-    this.toggleLeft = this.toggleLeft.bind(this);
   }
 
   componentDidMount() {
@@ -136,22 +136,6 @@ class ExploreViewContainer extends React.Component {
       />);
   }
 
-  toggleLeft(){
-    $('#explore-left-panel').toggle( "slide" );
-    // $('#explore-right-panel').toggleClass('col-sm-8 col-sm-12');
-
-    const sliderIcon = $('#explore-slider-icon');
-    sliderIcon.toggleClass('fa-caret-square-o-left fa-caret-square-o-right');
-    sliderIcon.prop('title',function(i,value){
-      if(value == "Hide Form Field"){
-        return "Display Form Field"
-      }
-      else{
-        return "Hide Form Field";
-      }
-    });
-  }
-
   render() {
     if (this.props.standalone) {
       return this.renderChartContainer();
@@ -190,10 +174,6 @@ class ExploreViewContainer extends React.Component {
             />
           </div>
           <div className="col-sm-8" id="explore-right-panel">
-              <span className = "explore-left-panel-slider">
-                <i id="explore-slider-icon" className="fa fa-caret-square-o-left" aria-hidden="true" title="Hide Form Field"
-                   data-toggle="tooltip" onClick={this.toggleLeft}></i>
-              </span>
             {this.renderChartContainer()}
           </div>
         </div>

@@ -48,7 +48,9 @@ class ChartContainer extends React.PureComponent {
     this.state = {
       selector: `#${props.containerId}`,
       showStackTrace: false,
+      sliderStatus: true,
     };
+    this.toggleLeft = this.toggleLeft.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -222,6 +224,33 @@ class ChartContainer extends React.PureComponent {
     );
   }
 
+  //To toggle left side panel -  Form field
+  toggleLeft(){
+      if(this.state.sliderStatus){
+          $('#explore-left-panel').toggle("slow","linear",function(){
+              $('#explore-right-panel').toggleClass('col-sm-8 col-sm-12');
+          });
+      }
+      else{
+          $('#explore-right-panel').toggleClass('col-sm-8 col-sm-12');
+          $('#explore-left-panel').toggle("slow","linear");
+      }
+
+      this.setState({ sliderStatus: !this.state.sliderStatus});
+
+      const sliderIcon = $('#explore-slider-icon');
+      sliderIcon.toggleClass('fa-caret-square-o-left fa-caret-square-o-right');
+      sliderIcon.prop('title',function(i,value){
+          if(value == "Hide Form Field"){
+              return "Display Form Field"
+          }
+          else{
+              return "Hide Form Field";
+          }
+      });
+      this.renderViz();
+  }
+
   render() {
     if (this.props.standalone) {
       // dom manipulation hack to get rid of the boostrap theme's body background
@@ -231,6 +260,10 @@ class ChartContainer extends React.PureComponent {
     const queryResponse = this.props.queryResponse;
     return (
       <div className="chart-container">
+        <span className = "explore-left-panel-slider">
+          <i id="explore-slider-icon" className="fa fa-caret-square-o-left" aria-hidden="true" title="Hide Form Field"
+             data-toggle="tooltip" onClick={this.toggleLeft}></i>
+        </span>
         <Panel
           style={{ height: this.props.height }}
           header={

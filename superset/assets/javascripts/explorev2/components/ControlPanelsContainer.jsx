@@ -45,7 +45,7 @@ class ControlPanelsContainer extends React.Component {
   render() {
     return (
       <div className="scrollbar-container">
-        <div className="scrollbar-content">
+        <div className="scrollbar-content p-b-30">
           {this.props.alert &&
             <Alert bsStyle="warning">
               {this.props.alert}
@@ -56,11 +56,12 @@ class ControlPanelsContainer extends React.Component {
               />
             </Alert>
           }
-          {this.sectionsToRender().map(section => (
+          {this.sectionsToRender().map((section,index) => (
             <ControlPanelSection
               key={section.label}
               label={section.label}
               tooltip={section.description}
+              index = {index}
             >
               {section.controlSetRows.map((controlSets, i) => (
                 <ControlRow

@@ -14,7 +14,7 @@ export default function InfoTooltipWithTrigger({ label, tooltip }) {
       placement="right"
       overlay={<Tooltip id={`${slugify(label)}-tooltip`}>{tooltip}</Tooltip>}
     >
-      <i className="fa fa-question-circle-o" />
+      <i className='fa fa-question-circle-o'/>
     </OverlayTrigger>
   );
 }
