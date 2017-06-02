@@ -4,7 +4,7 @@ import d3 from 'd3';
 import cloudLayout from 'd3-cloud';
 import { category21 } from '../javascripts/modules/colors';
 import {customColor} from "../javascripts/customColors"
-import { SIZE_FROM, SIZE_TO } from '../javascripts/explorev2/stores/controls_extended';
+import { SIZE_FROM, SIZE_TO } from '../javascripts/explore/stores/controls_extended';
 
 
 

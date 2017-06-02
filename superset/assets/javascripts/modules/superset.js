@@ -3,8 +3,8 @@ import $ from 'jquery';
 import Mustache from 'mustache';
 import vizMap from '../../visualizations/main';
 require('../../visualizations/main_extended.js');  //Added By Kusumakar
-import { getExploreUrl } from '../explorev2/exploreUtils';
-import { applyDefaultFormData } from '../explorev2/stores/store';
+import { getExploreUrl } from '../explore/exploreUtils';
+import { applyDefaultFormData } from '../explore/stores/store';
 
 const utils = require('./utils');
 
