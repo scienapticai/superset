@@ -229,28 +229,35 @@ class ChartContainer extends React.PureComponent {
   //To toggle left side panel -  Form field
   toggleLeft(){
       if(this.state.sliderStatus){
-          $('#explore-left-panel').toggle("slow","linear",function(){
-              $('#explore-right-panel').toggleClass('col-sm-8 col-sm-12');
+          $('#explore-left-panel').toggle("slow","linear",() => {
+              $('#explore-right-panel').toggleClass('col-sm-8 col-sm-12').promise().done(() => {
+                  this.toggleSliderIconAndRenderViz();
+              });
           });
       }
       else{
-          $('#explore-right-panel').toggleClass('col-sm-8 col-sm-12');
-          $('#explore-left-panel').toggle("slow","linear");
+          $('#explore-right-panel').toggleClass('col-sm-8 col-sm-12').promise().done(() => {
+              $('#explore-left-panel').toggle("slow","linear",() => {
+                  this.toggleSliderIconAndRenderViz();
+              });
+          });
       }
+  }
 
+  toggleSliderIconAndRenderViz(){
       this.setState({ sliderStatus: !this.state.sliderStatus});
-
       const sliderIcon = $('#explore-slider-icon');
-      sliderIcon.toggleClass('fa-caret-square-o-left fa-caret-square-o-right');
-      sliderIcon.prop('title',function(i,value){
-          if(value == "Hide Form Field"){
-              return "Display Form Field"
-          }
-          else{
-              return "Hide Form Field";
-          }
+      sliderIcon.toggleClass('fa-caret-square-o-left fa-caret-square-o-right').promise().done(() => {
+          sliderIcon.prop('title',(i,value) => {
+              if(value == "Hide Form Field"){
+                  return "Display Form Field"
+              }
+              else{
+                  return "Hide Form Field";
+              }
+          });
+          this.renderViz();
       });
-      this.renderViz();
   }
 
   render() {
@@ -262,10 +269,6 @@ class ChartContainer extends React.PureComponent {
     const queryResponse = this.props.queryResponse;
     return (
       <div className="chart-container">
-        <span className = "explore-left-panel-slider">
-          <i id="explore-slider-icon" className="fa fa-caret-square-o-left" aria-hidden="true" title="Hide Form Field"
-             data-toggle="tooltip" onClick={this.toggleLeft}></i>
-        </span>
         <Panel
           style={{ height: this.props.height }}
           header={
@@ -321,6 +324,10 @@ class ChartContainer extends React.PureComponent {
                   queryEndpoint={getExploreUrl(this.props.latestQueryFormData, 'query')}
                 />
               </div>
+              <span className = "explore-left-panel-slider pull-left">
+                <i id="explore-slider-icon" className="fa fa-caret-square-o-left" aria-hidden="true" title="Hide Form Field"
+                   data-toggle="tooltip" onClick={this.toggleLeft}></i>
+              </span>
             </div>
           }
         >
