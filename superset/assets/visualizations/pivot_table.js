@@ -17,12 +17,16 @@ module.exports = function (slice, payload) {
   container.html(payload.data);
 
   // format number
-  $('td').each(function () {
-    const tdText = $(this)[0].textContent;
-    if (!isNaN(tdText) && tdText !== '') {
-      $(this)[0].textContent = d3.format(numberFormat)(tdText);
-    }
-  });
+  //   if(numberFormat!=='') {
+  //   console.log("Number Format:" , numberFormat)
+        $('td').each(function () {
+            const tdText = $(this)[0].textContent;
+            console.log("Text:", tdText)
+            if (!isNaN(tdText) && tdText !== '') {
+                $(this)[0].textContent = d3.format(numberFormat)(tdText);
+            }
+        });
+    // }
 
   if (fd.groupby.length === 1) {
     // When there is only 1 group by column,

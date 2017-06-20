@@ -396,7 +396,7 @@ class PivotTableViz(BaseViz):
             columns=self.form_data.get('columns'),
             values=self.form_data.get('metrics'),
             aggfunc=self.form_data.get('pandas_aggfunc'),
-            margins=True,
+            margins=False,
         )
         return df.to_html(
             na_rep='',

@@ -164,7 +164,8 @@ visForColor.forEach(function(viz){
 
 function assignValueToFirstNullLabel(visTypes){
     const viz = Object.keys(visTypes);
-    const newVisType = viz.map(function(vizType){
+    const newVisType = {};
+    viz.forEach(function (vizType) {
         const vizObject = visTypes[vizType];
         if (Array.isArray(vizObject.controlPanelSections)) {
             if (vizObject.controlPanelSections[0].label == null) {
@@ -176,12 +177,18 @@ function assignValueToFirstNullLabel(visTypes){
                 vizObject.controlPanelSections.label = 'Fields';
             }
         }
-        return vizObject;
+        newVisType.vizType = vizObject
+
     });
     return newVisType;
 }
 
+// console.log("Keysss" , Object.keys(assignValueToFirstNullLabel(visTypes)))
 $.extend(visTypes,assignValueToFirstNullLabel(visTypes));
+
+
 $.extend(visTypes, newVisTypes);
+
+
 
 export default visTypes;

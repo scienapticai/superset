@@ -20,18 +20,24 @@ class Header extends React.PureComponent {
     return (
       <div className="title">
         <div className="pull-left">
+
           <h1>
             {dashboard.dashboard_title} &nbsp;
             <span is class="favstar" class_name="Dashboard" obj_id={dashboard.id} />
           </h1>
         </div>
-        <div className="pull-right" style={{ marginTop: '35px' }}>
-          {!this.props.dashboard.standalone_mode &&
-          <Controls dashboard={dashboard} />
-        }
+        <div className="pull-right">
+            <div style={{ marginBottom: '25px'}}>
+                <img className="logo_class" id="logo_id" src="/static/assets/images/aflac.png" width="120" height="40" />
+            </div>
+              {!this.props.dashboard.standalone_mode &&
+              <Controls dashboard={dashboard} />
+            }
+
         </div>
         <div className="clearfix" />
       </div>
+
     );
   }
 }

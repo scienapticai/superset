@@ -34,3 +34,17 @@
 .country_map path.region {
     cursor: pointer;
 }
+tooltip_div.tooltip {
+    position: absolute;
+    text-align: center;
+    width: auto;
+    height: auto;
+    padding: auto;
+    font: 12px sans-serif;
+    color:white;
+    background: #00a7e1;
+    border: 0px;
+    border-radius: 4px;
+    pointer-events: none;
+}
+

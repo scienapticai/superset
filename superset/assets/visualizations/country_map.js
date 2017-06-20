@@ -95,6 +95,11 @@ function countryMapChart(slice, payload) {
     }
   };
 
+    var tooltip_div = d3.select("body").append("tooltip_div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+    var tooltip_div_string="";
+
   const mouseenter = function (d) {
     // Darken color
     let c = colorFn(d);
@@ -102,15 +107,42 @@ function countryMapChart(slice, payload) {
       c = d3.rgb(c).darker().toString();
     }
     d3.select(this).style('fill', c);
-    selectAndDisplayNameOfRegion(d);
+    // selectAndDisplayNameOfRegion(d);
+      let name = '';
+      if (d && d.properties) {
+          if (d.properties.ID_2) {
+              name = d.properties.NAME_2;
+          } else {
+              name = d.properties.NAME_1;
+          }
+      }
     const result = data.filter(region => region.country_id === d.properties.ISO);
-    updateMetrics(result);
+    // updateMetrics(result);
+      var resultText=""
+      if (result.length > 0) {
+          resultText = (d3.format(',')(result[0].metric));
+      }
+
+      var tooltip_div_string="<table>" + "<th>" + name+ "</th>";
+      tooltip_div_string = tooltip_div_string + "<tr>"
+      tooltip_div_string = tooltip_div_string +"<td>" +resultText+"</td>";
+      tooltip_div_string = tooltip_div_string + "</tr>"
+
+      tooltip_div_string = tooltip_div_string + "</table>"
+
+      tooltip_div.transition()
+          .duration(200)
+          .style("opacity", 0.9);
+      tooltip_div .html(tooltip_div_string)
+          .style("left", d3.event.pageX -150 + "px")
+          .style("top", d3.event.pageY-100 + "px");
   };
 
   const mouseout = function () {
-    d3.select(this).style('fill', colorFn);
-    bigText.text('');
-    resultText.text('');
+      d3.select(this).style('fill', colorFn);
+      tooltip_div.transition()
+          .duration(500)
+          .style("opacity", 0);
   };
 
   div.append('rect')

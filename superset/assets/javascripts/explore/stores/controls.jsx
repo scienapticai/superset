@@ -10,10 +10,13 @@ const D3_FORMAT_DOCS = 'D3 format syntax: https://github.com/d3/d3-format';
 const D3_TIME_FORMAT_OPTIONS = [
   ['.3s', '.3s | 12.3k'],
   ['.3%', '.3% | 1234543.210%'],
-  ['.4r', '.4r | 12350'],
+  ['.4r', '.4r | 12350 | 12.34 | 1.234'],
   ['.3f', '.3f | 12345.432'],
   ['+,', '+, | +12,345.4321'],
   ['$,.2f', '$,.2f | $12,345.43'],
+    ['.0f', '.0f | 12345'],
+    ['', 'No Formating'],
+    ['.0f', '.0f | 1235'],
 ];
 
 const ROW_LIMIT_OPTIONS = [10, 50, 100, 250, 500, 1000, 5000, 10000, 50000];
@@ -574,7 +577,7 @@ export const controls = {
     freeForm: true,
     label: 'Number format',
     renderTrigger: true,
-    default: '.3s',
+    default: '',
     choices: D3_TIME_FORMAT_OPTIONS,
     description: D3_FORMAT_DOCS,
   },
