@@ -25,14 +25,17 @@ function bigNumberVis(slice, payload) {
   svg.attr('width', width);
   svg.attr('height', height);
 
-
   let vCompare;
   let v;
   if (fd.viz_type === 'big_number') {
     v = data[data.length - 1][1];
   } else {
+    if(json.last_updated == 1){
 
-    v = data[0][0];
+        v = data;
+    }else{
+        v = data[0][0];
+    }
   }
   if (json.compare_lag > 0) {
     const pos = data.length - (json.compare_lag + 1);
@@ -66,6 +69,7 @@ function bigNumberVis(slice, payload) {
   })
   .interpolate('cardinal');
 
+  const input = (json.last_updated==1) ? v : f(v);
   let y = height / 2;
   let g = svg.append('g');
   // Printing big number
@@ -79,7 +83,7 @@ function bigNumberVis(slice, payload) {
   .attr('id', 'bigNumber')
   .style('font-weight', 'bold')
   .style('cursor', 'pointer')
-  .text(f(v))
+  .text(input)
   .style('font-size', d3.min([height, width]) / 3.5)
   .style('text-anchor', 'middle')
   .attr('fill', 'black');

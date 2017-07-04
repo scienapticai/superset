@@ -28,7 +28,7 @@ class Header extends React.PureComponent {
         </div>
         <div className="pull-right">
             <div style={{ marginBottom: '25px'}}>
-                <img className="logo_class" id="logo_id" src="/static/assets/images/aflac.png" width="120" height="40" />
+                <img className="logo_class" id="logo_id" src="/static/assets/images/aflac.png" width="128" height="40" />
             </div>
               {!this.props.dashboard.standalone_mode &&
               <Controls dashboard={dashboard} />

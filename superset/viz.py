@@ -783,9 +783,18 @@ class BigNumberTotalViz(BaseViz):
     def get_data(self, df):
         form_data = self.form_data
         df.sort_values(by=df.columns[0], inplace=True)
+
+        #AFLAC For Displaying in last updated
+        data = df.values.tolist()
+        last_updated_flag = 0
+        if df.dtypes[self.form_data['metric']] == 'datetime64[ns]':
+            data = str(df[self.form_data['metric']][0])
+            last_updated_flag = 1
+
         return {
-            'data': df.values.tolist(),
+            'data': data,
             'subheader': form_data.get('subheader', ''),
+            'last_updated': last_updated_flag,
         }
 
 
@@ -1085,7 +1094,7 @@ class DistributionBarViz(DistributionPieViz):
         fd = self.form_data
 
         row = df.groupby(self.groupby).sum()[self.metrics[0]].copy()
-        row.sort_values(ascending=False, inplace=True)
+        #row.sort_values(ascending=False, inplace=True)
         columns = fd.get('columns') or []
         pt = df.pivot_table(
             index=self.groupby,
@@ -1096,6 +1105,12 @@ class DistributionBarViz(DistributionPieViz):
             pt = pt.T
             pt = (pt / pt.sum()).T
         pt = pt.reindex(row.index)
+
+        #AFLAC
+        month_index = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+        if(set(row.index) <= set(month_index)):
+            pt = pt.reindex(month_index)
+
         chart_data = []
         for name, ys in pt.iteritems():
             if pt[name].dtype.kind not in "biufc" or name in self.groupby:
