@@ -215,7 +215,7 @@ function nvd3Vis(slice, payload) {
         ch_margin_left = parseInt(fd.margin_left) || 0;
         leg_margin_bottom = parseInt(fd.legend_margin_bottom) || 0;
         chart.legend.margin().bottom = leg_margin_bottom;
-        chart.margin({ "left": ch_margin_left });
+        //chart.margin({ "left": ch_margin_left });
         break;
 
       case 'pie':
@@ -467,6 +467,14 @@ function nvd3Vis(slice, payload) {
       .call(chart);
     }
 
+    d3.select(slice.selector).select("g.nvd3.nv-legend").selectAll("circle.nv-legend-symbol")
+    .on("click.namespace", function (d) {
+        if (fd.show_bar_value) {
+            setTimeout(function () {
+                addTotalBarValues(svg, chart, payload.data, stacked, fd.y_axis_format);
+            }, animationTime);
+        }
+    });
     // on scroll, hide tooltips. throttle to only 4x/second.
     $(window).scroll(throttle(hideTooltips, 250));
 
